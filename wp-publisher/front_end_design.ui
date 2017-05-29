@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>main_window_dialog</class>
+ <widget class="QDialog" name="main_window_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>278</height>
+    <width>461</width>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>WP Publisher</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget">
+  <widget class="QTabWidget" name="main_tab">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>20</y>
      <width>440</width>
-     <height>251</height>
+     <height>381</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="initialize_tab">
     <attribute name="title">
      <string>Initialize</string>
     </attribute>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="installation_start_button">
      <property name="geometry">
       <rect>
        <x>330</x>
-       <y>180</y>
+       <y>300</y>
        <width>91</width>
        <height>31</height>
       </rect>
@@ -45,7 +45,7 @@
       <string>Start</string>
      </property>
     </widget>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="installation_site_group_box">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -55,9 +55,9 @@
       </rect>
      </property>
      <property name="title">
-      <string>Installation Details</string>
+      <string>Site</string>
      </property>
-     <widget class="QToolButton" name="toolButton">
+     <widget class="QToolButton" name="installation_path_file_selector">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -70,7 +70,7 @@
        <string>...</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="installation_path_text">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -80,7 +80,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="installation_path_label">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -93,7 +93,7 @@
        <string>Installation Path</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="installation_username_label">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -106,7 +106,7 @@
        <string>Username</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="installation_username_text">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -116,7 +116,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="installation_site_name_text">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -126,7 +126,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="installation_site_name">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -139,7 +139,7 @@
        <string>Site Name</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="wordmove_checkbox">
       <property name="geometry">
        <rect>
         <x>280</x>
@@ -152,7 +152,7 @@
        <string>Wordmove config</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="installation_site_url">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -165,7 +165,7 @@
        <string>Site Url</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="installation_site_url_text">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -176,32 +176,35 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="installation_progress_group_box">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>170</y>
+       <y>280</y>
        <width>301</width>
-       <height>51</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="title">
       <string>Installation Progress</string>
      </property>
-     <widget class="QProgressBar" name="progressBar">
+     <widget class="QProgressBar" name="installation_progress_progress_bar">
       <property name="geometry">
        <rect>
         <x>180</x>
         <y>20</y>
-        <width>118</width>
+        <width>115</width>
         <height>23</height>
        </rect>
       </property>
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
       <property name="value">
-       <number>24</number>
+       <number>0</number>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="installation_progress_current_status">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -215,47 +218,277 @@
       </property>
      </widget>
     </widget>
-    <zorder>groupBox_2</zorder>
-    <zorder>pushButton</zorder>
-    <zorder>groupBox</zorder>
-   </widget>
-   <widget class="QWidget" name="tab_3">
-    <attribute name="title">
-     <string>Publish</string>
-    </attribute>
-   </widget>
-   <widget class="QWidget" name="tab_2">
-    <attribute name="title">
-     <string>Logs</string>
-    </attribute>
-    <widget class="QTextBrowser" name="textBrowser">
+    <widget class="QGroupBox" name="installation_database_group_box">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
-       <width>401</width>
-       <height>231</height>
+       <y>170</y>
+       <width>411</width>
+       <height>101</height>
       </rect>
      </property>
-     <property name="cursor" stdset="0">
-      <cursorShape>IBeamCursor</cursorShape>
+     <property name="title">
+      <string>Database</string>
      </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+     <widget class="QLabel" name="installation_database_hostname_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Hostname</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="installation_database_hostname_text">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>30</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="installation_database_password_text">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>60</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="installation_database_username_text">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>60</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="installation_database_username_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Username</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="installation_database_password_label">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>60</y>
+        <width>61</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Password</string>
+      </property>
+     </widget>
+    </widget>
+    <zorder>installation_progress_group_box</zorder>
+    <zorder>installation_start_button</zorder>
+    <zorder>installation_site_group_box</zorder>
+    <zorder>installation_database_group_box</zorder>
+   </widget>
+   <widget class="QWidget" name="publish_tab">
+    <attribute name="title">
+     <string>Publish</string>
+    </attribute>
+    <widget class="QGroupBox" name="publish_host_group_box">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>401</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Host</string>
+     </property>
+     <widget class="QLabel" name="publish_api_key_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>47</width>
+        <height>13</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>API Key</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="publish_api_key_text">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>30</y>
+        <width>271</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="publish_installation_path_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Installation Path</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="publish_installation_path_text">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>60</y>
+        <width>231</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="publish_installation_path_selector">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>60</y>
+        <width>25</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>...</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="publish_site_url_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Site Url</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="publish_site_url_text">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>90</y>
+        <width>271</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="publish_start">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>290</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="logs_tab">
+    <attribute name="title">
+     <string>Logs</string>
+    </attribute>
+    <widget class="QGroupBox" name="logs_output_group_box">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>411</width>
+       <height>321</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Output</string>
+     </property>
+     <widget class="QTextBrowser" name="logs_output_text_box">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>391</width>
+        <height>281</height>
+       </rect>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>IBeamCursor</cursorShape>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;test 123&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
+      </property>
+     </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_4">
+   <widget class="QWidget" name="help_tab">
     <attribute name="title">
      <string>Help</string>
     </attribute>
+    <widget class="QGroupBox" name="help_group_box">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>391</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Help</string>
+     </property>
+     <widget class="QLabel" name="help_info_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>361</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Please see readme</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="project_title_and_version">
    <property name="geometry">
     <rect>
      <x>290</x>

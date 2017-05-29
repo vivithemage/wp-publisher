@@ -1,7 +1,9 @@
 import digitalocean
 import paramiko
 
-manager = digitalocean.Manager(token="eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f21d5540e0456c9ec3fa726")
+apiKey ="eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f21d5540e0456c9ec3fa726"
+
+manager = digitalocean.Manager(token = apiKey)
 my_droplets = manager.get_all_droplets()
 print(my_droplets)
 with open('user_data.txt', 'r') as myfile:
@@ -9,7 +11,7 @@ with open('user_data.txt', 'r') as myfile:
 
 print(user_data)
 
-droplet = digitalocean.Droplet(token="eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f21d5540e0456c9ec3fa726",
+droplet = digitalocean.Droplet(token=apiKey,
                                name='Example1253',
                                region='nyc2', # New York 2
                                image='ubuntu-14-04-x64', # Ubuntu 14.04 x64
@@ -20,6 +22,6 @@ droplet = digitalocean.Droplet(token="eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect('192.168.0.150', username='root', password='Eld3nW03')
-stdin, stdout, stderr = client.exec_command('apt-get upgrade -y')
+client.connect('162.243.17.149', username='demo', allow_agent=True)
+stdin, stdout, stderr = client.exec_command('ls /')
 print(stdout.readlines())
