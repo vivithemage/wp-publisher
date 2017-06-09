@@ -1,43 +1,51 @@
 import sys
-import digitalocean
 import paramiko
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication
+from PyQt5.QtCore import QCoreApplication
 
-from wppublisher.ui import front_end
+from wppublisher.ui import gui
+from wppublisher.push import server
+
+def b1_clicked():
+   print ("Button 1 clicked")
+
+def selectFile():
+    fileDialog = QtGui.QFileDialog()
+    fileDialog.show()
+
+
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    main_window = QtWidgets.QMainWindow()
+    ui = gui.Ui_MainWindow()
+    ui.setupUi(main_window)
+
+    vps = server.digital_ocean()
+    # vps.create()
+
+    # ui.publish_start.clicked(ui.get(), b1_clicked)
+
+    # QtCore.QObject.connect(main_window_dialog, QtCore.SIGNAL("installation_start_button"), b1_clicked)
+
+    start_button = ui.installation_start_button
+    start_button.clicked.connect(b1_clicked)
+
+    initialize_file_selector = ui.installation_path_file_selector
+    initialize_file_selector.clicked.connect(selectFile)
+
+    main_window.show()
+    sys.exit(app.exec_())
+    # droplet.create()
+
+    # client = paramiko.SSHClient()
+    # client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    # client.connect('162.243.17.149', username='demo', allow_agent=True)
+    # stdin, stdout, stderr = client.exec_command('ls /')
+    # print(stdout.readlines())
+    # sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    main_window_dialog = QtWidgets.QDialog()
-    ui = front_end.Ui_main_window_dialog()
-    ui.setupUi(main_window_dialog)
-    main_window_dialog.show()
-    sys.exit(app.exec_())
-
-    apiKey = "eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f21d5540e0456c9ec3fa726"
-
-    manager = digitalocean.Manager(token = apiKey)
-    my_droplets = manager.get_all_droplets()
-    print(my_droplets)
-    with open('user_data.txt', 'r') as myfile:
-        user_data=myfile.read()
-
-    print(user_data)
-
-
-    droplet = digitalocean.Droplet(token=apiKey,
-                                   name='Example1253',
-                                   region='nyc2', # New York 2
-                                   image='ubuntu-14-04-x64', # Ubuntu 14.04 x64
-                                   size_slug='512mb',  # 512MB
-                                   user_data=user_data)
-
-
-    #droplet.create()
-
-    #client = paramiko.SSHClient()
-    #client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #client.connect('162.243.17.149', username='demo', allow_agent=True)
-    #stdin, stdout, stderr = client.exec_command('ls /')
-    #print(stdout.readlines())
-    #sys.exit(app.exec_())
+    main()
