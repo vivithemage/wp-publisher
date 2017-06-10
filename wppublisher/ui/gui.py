@@ -1,7 +1,4 @@
-import sys
-from PyQt5.QtWidgets import (QMainWindow, QTextEdit,
-                             QAction, QFileDialog, QApplication)
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 from wppublisher.ui import generated
 
 '''
@@ -12,19 +9,20 @@ Instead, this class wraps around it.
 class wp_gui(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.init_ui()
 
-        self.initUI()
+    def init_ui(self):
+        self.ui = generated.Ui_MainWindow()
+        self.ui.setupUi(self)
 
-    def initUI(self):
-        ui = generated.Ui_MainWindow()
-        ui.setupUi(self)
-
-        start_button = ui.installation_start_button
-        start_button.clicked.connect(self.showDialog)
+        installation_path_selector = self.ui.installation_path_file_selector
+        installation_path_selector.clicked.connect(self.set_installation_path)
         self.show()
 
-    def showDialog(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '/home')
+    def set_installation_path(self):
+        folder_name = QFileDialog.getExistingDirectory(self, 'Select the folder where you would like to install wordpress')
+        installation_path = self.ui.installation_path_text
+        installation_path.setText(folder_name)
 
         '''
         if fname[0]:
