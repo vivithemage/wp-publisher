@@ -3,6 +3,7 @@ import paramiko
 
 class digital_ocean():
     def __init__(self):
+        # TODO pull this in from settings in gui and pass through
         self.api_key = "eff3d2d39c9a7cd088a0be8f6d8859361057da4c7f21d5540e0456c9ec3fa726"
 
     '''
