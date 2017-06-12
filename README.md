@@ -3,12 +3,28 @@ Overview
 
 Hopefully something to make wordpress junk easier
 
-Configuration file
+Please note that this currently works with python 3.6 only.
+
+Generating the GUI
 ------------------
 
-pyuic5.exe -x .\front_end_design.ui -o front_end.py
+The gui is created in qt creator using the deisnger feature. This is then saved and converted into a
+python class by running the following command:
 
-The local mysql development database.
+    pyuic5.exe -x .\front_end_design.ui -o front_end.py
+
+Compiling into standalone application
+--------------------------------------
+
+* Make sure mingw is installed along with the gcc package.
+* Set the environment variables for the gcc compiler
+
+    $env:CC = "C:\MinGW\bin\mingw32-gcc.exe"
+
+* Run nuitka (install using pip install nuitka)
+
+    nuitka --recurse-all .\wp-publisher.py --standalone --plugin-enable=qt-plugins
+
 Setting up ssh keys
 -------------------
 
