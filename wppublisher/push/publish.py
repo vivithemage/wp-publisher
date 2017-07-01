@@ -1,17 +1,26 @@
 import digitalocean
+import logging
 import paramiko
 import time
 
 
 class DigitalOcean:
     def __init__(self, variables):
-        # TODO pull this in from settings in gui and pass through
-        self.api_key = "20f03956273725fe5a6133e5ebcb93de2ea5c454cd8461881ae6cff96c43d50a"
-        self.ip_address_v4 = None
-        self.cloud_init_path = 'user_data.txt'
+        logging.basicConfig(level=logging.INFO)
+        self.logger = logging.getLogger(__name__)
 
-        with open(self.cloud_init_path, 'r') as myfile:
-            user_data = myfile.read()
+        # self.api_key = variables['api_key']
+        self.api_key = "20f03956273725fe5a6133e5ebcb93de2ea5c454cd8461881ae6cff96c43d50a"
+        #self.site_name = variables['site_name']
+        self.installation_path = variables['installation_path']
+
+        self.cloud_init_path = 'user_data.txt'
+        self.ssh_init_path = 'init.sh'
+
+        self.ip_address_v4 = None
+
+        with open(self.cloud_init_path, 'r') as cloud_init_file:
+            user_data = cloud_init_file.read()
 
         self.instance = digitalocean.Droplet(token=self.api_key,
                                         name='lemptest',
@@ -20,25 +29,43 @@ class DigitalOcean:
                                         size_slug='512mb',
                                         user_data=user_data)
 
-        #self.api_key = variables['api_key']
 
+    '''
+    Never use this on a production account
+    Used to destroy all servers before
+    '''
     def dev_housekeeping(self):
         manager = digitalocean.Manager(token=self.api_key)
         my_droplets = manager.get_all_droplets()
         for droplet in my_droplets:
             droplet.destroy()
 
-    # Once it shows 'completed', droplet is up and running
+    def replace_ssh_command_variables(self, line):
+        return line
+
+    def run_init_commands(self, ssh_client):
+        with open(self.ssh_init_path) as f:
+            for line in f:
+                amended_line = self.replace_ssh_command_variables(line)
+                stdin, stdout, stderr = ssh_client.exec_command(amended_line)
+                self.logger.info(stdout.readlines())
+
+        ssh_client.close()
+
+    '''
+    Once the api returns 'completed', the droplet is up and running
+    '''
     def ready(self):
+        success_message = 'completed'
         actions = self.instance.get_actions()
+
         for action in actions:
             action.load()
-            if action.status == 'completed':
+            if action.status == success_message:
                 return True
             else:
-                print('Current Status: ' + action.status)
+                self.logger.info('Current Status: ' + action.status)
                 return False
-
 
     '''
     Creates the server instance
@@ -49,48 +76,54 @@ class DigitalOcean:
         self.ip_address_v4 = self.instance.ip_address
 
     '''
-    Additional configuration to prepare the site to host wp
+    Opens up ssh client and returns client to execute commands
     '''
-    def configuration(self):
+    def open_ssh_connection(self):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        '''
-        Check if the status of the server every second for 50 seconds
-        to see if it's ready.
-        '''
+        for attempt in range(0, 5):
+            try:
+                client.connect(self.ip_address_v4, port=22, username='root', password='5N73XvQN94UCLQWBkeMe8Nqt',
+                               allow_agent=True)
+            except paramiko.AuthenticationException:
+                self.logger.info("Issue connecting to server over ssh, trying again")
+                time.sleep(10)
+
+        return client
+
+    '''
+    Additional configuration to prepare the site to host wp
+    '''
+    def configuration(self):
         grace_period_seconds = 30
-        for seconds in range(0, 60):
+        max_check_seconds = 60
+
+        for seconds in range(0, max_check_seconds):
             time.sleep(1)
             if self.ready():
-                print('Server spin up is complete! Giving %d second grace period.' % grace_period_seconds)
+                self.logger.info('Server spin up is complete! Giving %d second grace period.' % grace_period_seconds)
                 time.sleep(grace_period_seconds)
-                print('All set, here we go!')
+                self.logger.info('All set, here we go!')
                 break
             else:
-                print("Server not ready, waiting: %d seconds so far" % (seconds))
+                self.logger.info("Server not ready, waiting: %d seconds so far" % (seconds))
 
-        print("connecting to " + self.ip_address_v4)
+        self.logger.info("connecting to " + self.ip_address_v4)
 
-        try:
-            client.connect(self.ip_address_v4, port=22, username='root', password='5N73XvQN94UCLQWBkeMe8Nqt', allow_agent=True)
-        except paramiko.AuthenticationException:
-            print("error")
-
-        stdin, stdout, stderr = client.exec_command('ls /')
-
-        print(stdout.readlines())
-
-        client.close()
-
+        ssh_client = self.open_ssh_connection()
+        self.run_init_commands(ssh_client)
 
     def initialize(self):
-        print("removing old machines")
+        self.logger.info("Removing old machines")
         self.dev_housekeeping()
-        print('starting spin up')
+
+        self.logger.info('Starting spin up')
         self.spin_up()
-        print('starting server configuration')
+
+        self.logger.info('Starting server configuration')
         self.configuration()
-        print('finished')
+
+        self.logger.info('Finished')
 
 

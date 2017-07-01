@@ -19,7 +19,6 @@ class App(QMainWindow):
         self.publish_variables = {}
         self.installation_variables = {}
 
-
     def get_installation_variables(self):
         database_variables = {
             'hostname': self.ui.installation_database_hostname_text.text(),
@@ -88,12 +87,10 @@ class App(QMainWindow):
     def start_install(self):
         if self.field_validation('installation'):
             installation = install.Wordpress(self.installation_variables)
-            installation.start()
+            installation.initialize()
 
     def start_publish(self):
-        print('publish start')
         if self.field_validation('publish'):
-            print('passed validation')
             vps = publish.DigitalOcean(self.publish_variables)
             vps.initialize()
 
