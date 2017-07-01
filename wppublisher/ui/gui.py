@@ -2,7 +2,7 @@ import datetime
 from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 
 from ui import generated
-from push import server
+from push import publish
 from initialize import install
 
 '''
@@ -16,9 +16,11 @@ class App(QMainWindow):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.publish_variables = {}
+        self.installation_variables = {}
+
 
     def get_installation_variables(self):
-
         database_variables = {
             'hostname': self.ui.installation_database_hostname_text.text(),
             'username': self.ui.installation_database_password_text.text(),
@@ -33,17 +35,33 @@ class App(QMainWindow):
             'database': database_variables
         }
 
-    def field_validation(self):
-        self.get_installation_variables()
+    def get_publish_variables(self):
+        self.publish_variables = {
+            'api_key': self.ui.publish_api_key_text.text(),
+            'installation_path': self.ui.publish_installation_path_text.text(),
+            'site_url': self.ui.publish_site_url_text.text()
+        }
 
-        if self.installation_variables['path'] == '':
-            message = 'Installation path is empty'
-            result = False
-        elif self.installation_variables['site_url'] == '':
-            message = 'Site Url is empty'
-            result = False
-        else:
-            message = 'No issues found, starting installation...'
+    def field_validation(self, field_section):
+        if field_section == 'installation':
+            self.get_installation_variables()
+
+            if self.installation_variables['path'] == '':
+                message = 'Installation path is empty'
+                result = False
+            elif self.installation_variables['site_url'] == '':
+                message = 'Site Url is empty'
+                result = False
+            elif self.installation_variables['database']['hostname'] == '':
+                message = 'Database hostname is empty'
+                result = False
+            else:
+                message = 'No issues found, starting installation...'
+                result = True
+        elif field_section == 'publish':
+            self.get_publish_variables()
+            print (self.publish_variables)
+            message = 'No issues found, starting publication...'
             result = True
 
         timestamp_format = '[%H:%M:%S]'
@@ -61,24 +79,40 @@ class App(QMainWindow):
         installation_path = self.ui.installation_path_text
         installation_path.setText(folder_name)
 
+    def set_publish_path(self):
+        dialogue_title = 'Select the wordpress installation you would like to publish'
+        folder_name = QFileDialog.getExistingDirectory(self, dialogue_title)
+        publish_path = self.ui.publish_installation_path_text
+        publish_path.setText(folder_name)
+
     def start_install(self):
-        if self.field_validation():
+        if self.field_validation('installation'):
             installation = install.Wordpress(self.installation_variables)
             installation.start()
 
     def start_publish(self):
-        vps = server.DigitalOcean()
-        vps.initialize()
+        print('publish start')
+        if self.field_validation('publish'):
+            print('passed validation')
+            vps = publish.DigitalOcean(self.publish_variables)
+            vps.initialize()
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # set connections up for buttons
+        # File path selectors
         installation_path_selector = self.ui.installation_path_file_selector
         installation_path_selector.clicked.connect(self.set_installation_path)
 
+        publish_path_selector = self.ui.publish_installation_path_selector
+        publish_path_selector.clicked.connect(self.set_publish_path)
+
+        # Start buttons
         installation_start_button = self.ui.installation_start_button
         installation_start_button.clicked.connect(self.start_install)
+
+        publish_start_button = self.ui.publish_start_button
+        publish_start_button.clicked.connect(self.start_publish)
 
         self.show()

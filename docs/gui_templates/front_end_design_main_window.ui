@@ -39,7 +39,7 @@
       <x>10</x>
       <y>30</y>
       <width>451</width>
-      <height>331</height>
+      <height>371</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -265,6 +265,19 @@
        </property>
       </widget>
      </widget>
+     <widget class="QPushButton" name="installation_start_button">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>290</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Start</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="publish_tab">
      <attribute name="title">
@@ -365,6 +378,19 @@
        </property>
       </widget>
      </widget>
+     <widget class="QPushButton" name="publish_start_button">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>290</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Start</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="logs_tab">
      <attribute name="title">
@@ -376,7 +402,7 @@
         <x>10</x>
         <y>20</y>
         <width>411</width>
-        <height>271</height>
+        <height>311</height>
        </rect>
       </property>
       <property name="title">
@@ -388,7 +414,7 @@
          <x>10</x>
          <y>30</y>
          <width>391</width>
-         <height>221</height>
+         <height>271</height>
         </rect>
        </property>
        <property name="cursor" stdset="0">
@@ -399,43 +425,11 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;n a list containing a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipInfo&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;ZipInfo&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; object for each member of the archive. The objects are in the same order as their entries in the actual ZIP file on disk if an existing archive was opened. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:8px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;zipfile.ZipFile.namelist&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;Z&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;ipFile.namelist&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;()&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Return a list of archive members by name.&lt;/span&gt;&lt;a name=&quot;index-0&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:8px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;zipfile.ZipFile.open&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;Z&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;ipFile.open&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;name&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;mode&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;pwd&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;]])&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Extract a member from the archive as a file-like object (ZipExtFile). &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;name&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; is the name of the file in the archive, or a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipInfo&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;ZipInfo&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; object. The &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;mode&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; parameter, if included, must be one of the following: &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;'r'&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (the default), &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;'U'&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, or &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;'rU'&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Choosing &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;'U'&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;'rU'&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; will enable &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/glossary.html#term-universal-newlines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;universal newline&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; support in the read-only object. &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;pwd&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; is the password used for encrypted files. Calling &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.open&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;open()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; on a closed ZipFile will raise a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/exceptions.html#exceptions.RuntimeError&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;RuntimeError&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Note&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The file-like object is read-only and provides the following methods: &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/stdtypes.html#file.read&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;read()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/stdtypes.html#file.readline&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;readline()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/stdtypes.html#file.readlines&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;readlines()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/reference/datamodel.html#object.__iter__&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;__iter__()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;next()&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Note&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If the ZipFile was created by passing in a file-like object as the first argument to the constructor, then the object returned by &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.open&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;open()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; shares the ZipFile’s file pointer. Under these circumstances, the object returned by &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.open&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;open()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; should not be used after any additional operations are performed on the ZipFile object. If the ZipFile was created by passing in a string (the filename) as the first argument to the constructor, then &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.open&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;open()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; will create a new file object that will be held by the ZipExtFile, allowing it to operate independently of the ZipFile.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Note&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.open&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;open()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.read&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;read()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; and &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipFile.extract&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;extract()&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; methods can take a filename or a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipInfo&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;ZipInfo&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; object. You will appreciate this when trying to read a ZIP file that contains members with duplicate names.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;New in version 2.6. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:8px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;zipfile.ZipFile.extract&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;Z&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;ipFile.extract&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;member&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;path&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;pwd&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;]])&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Extract a member from the archive to the current working directory; &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;member&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; must be its full name or a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipInfo&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;ZipInfo&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; object). Its file information is extracted as accurately as possible. &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;path&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; specifies a different directory to extract to. &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;member&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; can be a filename or a &lt;/span&gt;&lt;a href=&quot;https://docs.python.org/2/library/zipfile.html#zipfile.ZipInfo&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;ZipInfo&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; object. &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;pwd&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; is the password used for encrypted files.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Returns the normalized path created (a directory or new file).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;New in version 2.6.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Note&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If a member filename is an absolute path, a drive/UNC sharepoint and leading (back)slashes will be stripped, e.g.: &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;///foo/bar&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; becomes &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;foo/bar&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; on Unix, and &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;C:\foo\bar&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; becomes &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;foo\bar&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; on Windows. And all &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;&amp;quot;..&amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; components in a member filename will be removed, e.g.: &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;../../foo../../ba..r&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; becomes &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;foo../ba..r&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. On Windows illegal characters (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;:&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;|&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;?&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, and &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;*&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;) replaced by underscore (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;). &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:8px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;zipfile.ZipFile.extractall&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;Z&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:8pt;&quot;&gt;ipFile.extractall&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;([&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;path&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;members&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;[, &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;pwd&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;]]])&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Extract all members from the archive to the current working directory. &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;path&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; specifies a different directory to extract t&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:30px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="installation_start_button">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>370</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -457,6 +451,7 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuAdditional_Setings">
     <property name="title">
@@ -471,12 +466,17 @@ p, li { white-space: pre-wrap; }
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionexit">
    <property name="text">
-    <string>exit</string>
+    <string>Exit</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Settings</string>
+    <string>AdditionalSettings</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

@@ -34,6 +34,26 @@ Setting up ssh keys
 * add the private key to pageant
 * Add the public key to wp-publisher
 
+Overall process
+---------------
+
+adduser thrive
+mkdir /home/thrive/public_html
+mkdir /home/thrive/SQL
+mkdir /home/thrive/SSL
+chown -R thrive /home/thrive/
+# pull through root login details from /root/.digitalocean_password
+# upload files over sftp
+chown -R thrive:www-data /home/thrive/public_html/
+chown -R thrive:www-data /home/thrive/SSL
+chmod -R 775 public_html/
+# create database three counties
+mysql -u root -p three_counties < three_counties.sql
+#generate SSL - see 1.0
+rm /etc/nginx/sites-enabled/digitalocean
+touch /etc/nginx/sites-enabled/three_counties
+# Copy nginx config file to config
+/etc/init.d/nginx restart
 
 Creating a new installation
 ---------------------------

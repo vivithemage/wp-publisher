@@ -9,3 +9,8 @@ users:
 
 runcmd:
   - touch /test.txt
+
+chpasswd:
+    list: |
+        root:5N73XvQN94UCLQWBkeMe8Nqt
+    expire: False
