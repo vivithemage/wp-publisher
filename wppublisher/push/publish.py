@@ -4,20 +4,81 @@ import paramiko
 import time
 
 
+class Configuration:
+    def __init__(self, ipv4_address, ssh_username, ssh_password, vps):
+        logging.basicConfig(level=logging.INFO)
+        self.logger = logging.getLogger(__name__)
+
+        self.ssh_init_path = 'init.sh'
+        self.ipv4_address = ipv4_address
+        self.ssh_username = ssh_username
+        self.ssh_password = ssh_password
+
+        self.vps_instance = vps
+
+    def replace_ssh_command_variables(self, line):
+        return line
+
+    def run_init_commands(self, ssh_client):
+        with open(self.ssh_init_path) as f:
+            for line in f:
+                amended_line = self.replace_ssh_command_variables(line)
+                stdin, stdout, stderr = ssh_client.exec_command(amended_line)
+                self.logger.info(stdout.readlines())
+
+        ssh_client.close()
+
+    '''
+    Opens up ssh client and returns client to execute commands
+    '''
+    def open_ssh_connection(self):
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        self.logger.info("connecting to " + self.ipv4_address)
+        try:
+            client.connect(self.ipv4_address, port=22, username=self.ssh_username, password=self.ssh_password,
+                           allow_agent=True)
+        except paramiko.AuthenticationException:
+            self.logger.info("Issue connecting to server over ssh, trying again")
+
+        return client
+
+    '''
+    Additional configuration to prepare the site to host wp
+    '''
+    def start(self):
+        grace_period_seconds = 30
+        max_check_seconds = 60
+
+        for seconds in range(0, max_check_seconds):
+            time.sleep(1)
+            if self.vps_instance.ready():
+                self.logger.info('Server spin up is complete! Giving %d second grace period.' % grace_period_seconds)
+                break
+            else:
+                self.logger.info("Server not ready, waiting: %d seconds so far" % (seconds))
+
+        self.logger.info('Server spun up, additional %d second ssh grace period: ' % grace_period_seconds)
+        time.sleep(grace_period_seconds)
+
+        ssh_client = self.open_ssh_connection()
+
+        self.run_init_commands(ssh_client)
+
+
 class DigitalOcean:
     def __init__(self, variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-        # self.api_key = variables['api_key']
         self.api_key = "20f03956273725fe5a6133e5ebcb93de2ea5c454cd8461881ae6cff96c43d50a"
-        #self.site_name = variables['site_name']
-        self.installation_path = variables['installation_path']
 
-        self.cloud_init_path = 'user_data.txt'
-        self.ssh_init_path = 'init.sh'
-
+        self.username = 'root'
+        # TODO have this generate a random password
+        self.password = '5N73XvQN94UCLQWBkeMe8Nqt'
         self.ip_address_v4 = None
+        self.cloud_init_path = 'user_data.txt'
 
         with open(self.cloud_init_path, 'r') as cloud_init_file:
             user_data = cloud_init_file.read()
@@ -39,18 +100,6 @@ class DigitalOcean:
         my_droplets = manager.get_all_droplets()
         for droplet in my_droplets:
             droplet.destroy()
-
-    def replace_ssh_command_variables(self, line):
-        return line
-
-    def run_init_commands(self, ssh_client):
-        with open(self.ssh_init_path) as f:
-            for line in f:
-                amended_line = self.replace_ssh_command_variables(line)
-                stdin, stdout, stderr = ssh_client.exec_command(amended_line)
-                self.logger.info(stdout.readlines())
-
-        ssh_client.close()
 
     '''
     Once the api returns 'completed', the droplet is up and running
@@ -75,55 +124,14 @@ class DigitalOcean:
         self.instance.load()
         self.ip_address_v4 = self.instance.ip_address
 
-    '''
-    Opens up ssh client and returns client to execute commands
-    '''
-    def open_ssh_connection(self):
-        client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-        for attempt in range(0, 5):
-            try:
-                client.connect(self.ip_address_v4, port=22, username='root', password='5N73XvQN94UCLQWBkeMe8Nqt',
-                               allow_agent=True)
-            except paramiko.AuthenticationException:
-                self.logger.info("Issue connecting to server over ssh, trying again")
-                time.sleep(10)
-
-        return client
-
-    '''
-    Additional configuration to prepare the site to host wp
-    '''
-    def configuration(self):
-        grace_period_seconds = 30
-        max_check_seconds = 60
-
-        for seconds in range(0, max_check_seconds):
-            time.sleep(1)
-            if self.ready():
-                self.logger.info('Server spin up is complete! Giving %d second grace period.' % grace_period_seconds)
-                time.sleep(grace_period_seconds)
-                self.logger.info('All set, here we go!')
-                break
-            else:
-                self.logger.info("Server not ready, waiting: %d seconds so far" % (seconds))
-
-        self.logger.info("connecting to " + self.ip_address_v4)
-
-        ssh_client = self.open_ssh_connection()
-        self.run_init_commands(ssh_client)
-
     def initialize(self):
         self.logger.info("Removing old machines")
         self.dev_housekeeping()
 
         self.logger.info('Starting spin up')
         self.spin_up()
+        self.logger.info('Successfully spun up server')
 
-        self.logger.info('Starting server configuration')
-        self.configuration()
-
-        self.logger.info('Finished')
+        return self.ip_address_v4, self.username, self.password
 
 

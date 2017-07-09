@@ -36,6 +36,7 @@ class App(QMainWindow):
 
     def get_publish_variables(self):
         self.publish_variables = {
+            'cloud_service': 'Digital Ocean',
             'api_key': self.ui.publish_api_key_text.text(),
             'installation_path': self.ui.publish_installation_path_text.text(),
             'site_url': self.ui.publish_site_url_text.text()
@@ -87,12 +88,18 @@ class App(QMainWindow):
     def start_install(self):
         if self.field_validation('installation'):
             installation = install.Wordpress(self.installation_variables)
-            installation.initialize()
+            installation.start()
 
     def start_publish(self):
         if self.field_validation('publish'):
-            vps = publish.DigitalOcean(self.publish_variables)
-            vps.initialize()
+            # Create a new server
+            if self.publish_variables['cloud_service'] == 'Digital Ocean':
+                vps = publish.DigitalOcean(self.publish_variables)
+                ipv4_address, username, password = vps.initialize()
+
+            # Connect to server and perform all necessary configuration
+            vps_configuration = publish.Configuration(ipv4_address, username, password, vps)
+            vps_configuration.start()
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()
