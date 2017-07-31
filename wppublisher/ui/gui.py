@@ -1,5 +1,7 @@
 import datetime
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
+
 
 from ui import generated
 from push import publish
@@ -60,7 +62,6 @@ class App(QMainWindow):
                 result = True
         elif field_section == 'publish':
             self.get_publish_variables()
-            print (self.publish_variables)
             message = 'No issues found, starting publication...'
             result = True
 
@@ -88,18 +89,22 @@ class App(QMainWindow):
     def start_install(self):
         if self.field_validation('installation'):
             installation = install.Wordpress(self.installation_variables)
-            installation.start()
+            installation.run()
 
     def start_publish(self):
         if self.field_validation('publish'):
             # Create a new server
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
                 vps = publish.DigitalOcean(self.publish_variables)
-                ipv4_address, username, password = vps.initialize()
+                print("here: ")
+                ipv4_address, username, password = vps.run()
 
-            # Connect to server and perform all necessary configuration
-            vps_configuration = publish.Configuration(ipv4_address, username, password, vps)
-            vps_configuration.start()
+
+            '''
+            Connect to server and perform all necessary configuration
+            '''
+            vps_configuration = publish.Configuration(ipv4_address, username, password, vps, self.publish_variables)
+            vps_configuration.run()
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()

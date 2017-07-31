@@ -1,11 +1,51 @@
+import os
 import digitalocean
 import logging
 import paramiko
 import time
+import zipfile
+
+from PyQt5.QtCore import QCoreApplication, QMutex, QThread, QWaitCondition
+
+'''
+Puts the wp installation and puts it on the server.
+It wraps the folder up, uploads and extracts.
+'''
 
 
-class Configuration:
-    def __init__(self, ipv4_address, ssh_username, ssh_password, vps):
+class Uploader:
+    def __init__(self, client):
+        self.client = client
+
+    def prepare(self, path):
+        zipf = zipfile.ZipFile('test.com.zip', 'w', zipfile.ZIP_DEFLATED)
+
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                zipf.write(os.path.join(root, file))
+
+        zipf.close()
+
+        return True
+
+    def put(self):
+        self.prepare('C:/Users/vivi/workspace/wp-publisher/wppublisher/test.com/')
+        self.client.get_transport()
+        sftp = self.client.open_sftp()
+        sftp.put('C:/Users/vivi/workspace/wp-publisher/wppublisher/test.com/index.php', '/root/index.php')
+        self.unload()
+        return True
+
+    def unload(self):
+        return True
+
+'''
+
+'''
+
+
+class Configuration():
+    def __init__(self, ipv4_address, ssh_username, ssh_password, vps, gui_variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
@@ -13,8 +53,10 @@ class Configuration:
         self.ipv4_address = ipv4_address
         self.ssh_username = ssh_username
         self.ssh_password = ssh_password
-
+        self.gui_variables = gui_variables
         self.vps_instance = vps
+        print("here3")
+
 
     def replace_ssh_command_variables(self, line):
         return line
@@ -35,7 +77,7 @@ class Configuration:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        self.logger.info("connecting to " + self.ipv4_address)
+        self.logger.info("connecting to " + self.ipv4_address + " with: root/" + self.ssh_password)
         try:
             client.connect(self.ipv4_address, port=22, username=self.ssh_username, password=self.ssh_password,
                            allow_agent=True)
@@ -44,17 +86,18 @@ class Configuration:
 
         return client
 
+
     '''
     Additional configuration to prepare the site to host wp
     '''
-    def start(self):
+    def run(self):
         grace_period_seconds = 30
         max_check_seconds = 60
 
         for seconds in range(0, max_check_seconds):
             time.sleep(1)
             if self.vps_instance.ready():
-                self.logger.info('Server spin up is complete! Giving %d second grace period.' % grace_period_seconds)
+                self.logger.info('Server spin up is complete!')
                 break
             else:
                 self.logger.info("Server not ready, waiting: %d seconds so far" % (seconds))
@@ -64,10 +107,21 @@ class Configuration:
 
         ssh_client = self.open_ssh_connection()
 
+        transport = Uploader(ssh_client)
+        transport.put()
+
         self.run_init_commands(ssh_client)
 
+        ssh_client.close()
 
-class DigitalOcean:
+
+'''
+Does all the vitals to get the server up and running and returns the details to make a ssh connection.
+In this case it's Digital Ocean.
+'''
+
+
+class DigitalOcean():
     def __init__(self, variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
@@ -89,7 +143,6 @@ class DigitalOcean:
                                         image='lemp-16-04',
                                         size_slug='512mb',
                                         user_data=user_data)
-
 
     '''
     Never use this on a production account
@@ -124,7 +177,7 @@ class DigitalOcean:
         self.instance.load()
         self.ip_address_v4 = self.instance.ip_address
 
-    def initialize(self):
+    def run(self):
         self.logger.info("Removing old machines")
         self.dev_housekeeping()
 
@@ -133,5 +186,3 @@ class DigitalOcean:
         self.logger.info('Successfully spun up server')
 
         return self.ip_address_v4, self.username, self.password
-
-
