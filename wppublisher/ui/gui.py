@@ -1,7 +1,7 @@
 import datetime
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 
 from ui import generated
 from push import publish
@@ -20,6 +20,9 @@ class App(QMainWindow):
         self.init_ui()
         self.publish_variables = {}
         self.installation_variables = {}
+
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
     def get_installation_variables(self):
         database_variables = {
@@ -95,16 +98,18 @@ class App(QMainWindow):
         if self.field_validation('publish'):
             # Create a new server
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
-                vps = publish.DigitalOcean(self.publish_variables)
-                print("here: ")
-                ipv4_address, username, password = vps.run()
+                #vps = publish.DigitalOcean(self.publish_variables)
+                worker = publish.ServerInit(self.publish_variables)
+                self.threadpool.start(worker)
+
+                #ipv4_address, username, password = vps.run()
 
 
             '''
             Connect to server and perform all necessary configuration
             '''
-            vps_configuration = publish.Configuration(ipv4_address, username, password, vps, self.publish_variables)
-            vps_configuration.run()
+            #vps_configuration = publish.Configuration(ipv4_address, username, password, vps, self.publish_variables)
+            #vps_configuration.run()
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()

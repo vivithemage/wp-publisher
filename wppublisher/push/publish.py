@@ -5,7 +5,11 @@ import paramiko
 import time
 import zipfile
 
-from PyQt5.QtCore import QCoreApplication, QMutex, QThread, QWaitCondition
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+import traceback, sys
 
 '''
 Puts the wp installation and puts it on the server.
@@ -121,8 +125,10 @@ In this case it's Digital Ocean.
 '''
 
 
-class DigitalOcean():
+class ServerInit(QRunnable):
     def __init__(self, variables):
+        super(ServerInit, self).__init__()
+
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
@@ -145,8 +151,8 @@ class DigitalOcean():
                                         user_data=user_data)
 
     '''
-    Never use this on a production account
-    Used to destroy all servers before
+    !!CAUTION!! Never use this on a production account.
+    Used to destroy all servers during development to save coinage
     '''
     def dev_housekeeping(self):
         manager = digitalocean.Manager(token=self.api_key)
@@ -177,6 +183,7 @@ class DigitalOcean():
         self.instance.load()
         self.ip_address_v4 = self.instance.ip_address
 
+    @pyqtSlot()
     def run(self):
         self.logger.info("Removing old machines")
         self.dev_housekeeping()
@@ -185,4 +192,4 @@ class DigitalOcean():
         self.spin_up()
         self.logger.info('Successfully spun up server')
 
-        return self.ip_address_v4, self.username, self.password
+        #return self.ip_address_v4, self.username, self.password
