@@ -5,12 +5,6 @@ import paramiko
 import time
 import zipfile
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-
-import traceback, sys
-
 '''
 Puts the wp installation and puts it on the server.
 It wraps the folder up, uploads and extracts.
@@ -44,10 +38,8 @@ class Uploader:
         return True
 
 '''
-
+Configure the server to suit
 '''
-
-
 class Configuration():
     def __init__(self, ipv4_address, ssh_username, ssh_password, vps, gui_variables):
         logging.basicConfig(level=logging.INFO)
@@ -94,6 +86,7 @@ class Configuration():
     '''
     Additional configuration to prepare the site to host wp
     '''
+
     def run(self):
         grace_period_seconds = 30
         max_check_seconds = 60
@@ -125,7 +118,7 @@ In this case it's Digital Ocean.
 '''
 
 
-class ServerInit(QRunnable):
+class ServerInit:
     def __init__(self, variables):
         super(ServerInit, self).__init__()
 
@@ -183,7 +176,6 @@ class ServerInit(QRunnable):
         self.instance.load()
         self.ip_address_v4 = self.instance.ip_address
 
-    @pyqtSlot()
     def run(self):
         self.logger.info("Removing old machines")
         self.dev_housekeeping()
@@ -192,4 +184,4 @@ class ServerInit(QRunnable):
         self.spin_up()
         self.logger.info('Successfully spun up server')
 
-        #return self.ip_address_v4, self.username, self.password
+        return self.ip_address_v4, self.username, self.password
