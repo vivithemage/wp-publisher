@@ -51,11 +51,19 @@ class Configuration():
         self.ssh_password = ssh_password
         self.gui_variables = gui_variables
         self.vps_instance = vps
-        print("here3")
+        self.vps_mysql_password = None
 
 
     def replace_ssh_command_variables(self, line):
         return line
+
+    def get_mysql_password(self, ssh_client):
+        command = 'cat /root/.digitalocean_password'
+        result = ssh_client.exec_command(command)
+        stripped_result = result.replace('root_mysql_pass=', '')
+        self.vps_mysql_password = stripped_result.replace('"', '')
+        print (self.vps_mysql_password)
+
 
     def run_init_commands(self, ssh_client):
         with open(self.ssh_init_path) as f:
@@ -73,7 +81,7 @@ class Configuration():
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        self.logger.info("connecting to " + self.ipv4_address + " with: root/" + self.ssh_password)
+        self.logger.info("connecting to " + str(self.ipv4_address) + " with: root/" + self.ssh_password)
         try:
             client.connect(self.ipv4_address, port=22, username=self.ssh_username, password=self.ssh_password,
                            allow_agent=True)
@@ -88,7 +96,7 @@ class Configuration():
     '''
 
     def run(self):
-        grace_period_seconds = 30
+        grace_period_seconds = 60
         max_check_seconds = 60
 
         for seconds in range(0, max_check_seconds):
@@ -106,6 +114,8 @@ class Configuration():
 
         transport = Uploader(ssh_client)
         transport.put()
+
+        self.get_mysql_password(ssh_client)
 
         self.run_init_commands(ssh_client)
 

@@ -107,32 +107,38 @@ class App(QMainWindow):
             installation.run()
 
     def start_publish(self, progress_callback):
+        progress_callback.emit('Fields Validated')
         if self.field_validation('publish'):
             # Create a new server
-            progress_callback.emit('emitting something')
+            progress_callback.emit('Checking service type')
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
+                progress_callback.emit('Using servivce: ' + self.publish_variables['cloud_service'])
                 vps = publish.ServerInit(self.publish_variables)
                 ipv4_address, username, password = vps.run()
-                progress_callback.emit('emitting something x')
-
+                progress_callback.emit('Spun up server. Details are:')
+                progress_callback.emit('ipv4 address:' + ipv4_address)
+                progress_callback.emit('username: ' + username)
+                progress_callback.emit('password: ' + password)
 
             '''
             Connect to server and perform all necessary configuration
             '''
+            progress_callback.emit('Starting configuration')
             vps_configuration = publish.Configuration(ipv4_address, username, password, vps, self.publish_variables)
             vps_configuration.run()
+            progress_callback.emit('Finished Configuration')
+            progress_callback.emit('Uploading files')
+
 
     def print_output(self, s):
         print(s)
 
     def thread_complete(self):
-        print("THREAD COMPLETE!")
+        print("Finished Thread")
 
     def progress_fn(self, log):
-        #self.ui.logs_output_text_box.append('bleh')
-        #self.ui.logs_output_text_box.update()
-        self.ui.logs_output_text_box.setText(log)
-        print("almost done")
+        self.ui.logs_output_text_box.insertPlainText(log + '\n')
+        #print(dir(self.ui.logs_output_text_box.setText))
 
     def publish_trigger(self):
         # Pass the function to execute
