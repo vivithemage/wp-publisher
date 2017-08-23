@@ -37,7 +37,7 @@ class App(QMainWindow):
             'path': self.ui.installation_path_text.text(),
             'site_url': self.ui.installation_site_url_text.text(),
             'username': self.ui.installation_username_text.text(),
-            'wordmove_config': self.ui.wordmove_checkbox.isChecked(),
+            #'wordmove_config': self.ui.wordmove_checkbox.isChecked(),
             'database': database_variables
         }
 
@@ -63,11 +63,28 @@ class App(QMainWindow):
                 message = 'Database hostname is empty'
                 result = False
             else:
-                message = 'No issues found, starting installation...'
+                message = 'Installation fields validated, starting...'
                 result = True
         elif field_section == 'publish':
             self.get_publish_variables()
-            message = 'No issues found, starting publication...'
+
+            if self.get_publish_variables['cloud_service'] == '':
+                message = 'Installation path is empty'
+                result = False
+            elif self.get_publish_variables['site_url'] == '':
+                message = 'URL is empty'
+                result = False
+            elif self.get_publish_variables['api_key'] == '':
+                message = 'Api key is empty'
+                result = False
+            elif self.get_publish_variables['cloud_service'] == '':
+                message = 'Cloud service is empty'
+                result = False
+            else:
+                message = 'Fields validated, starting installation...'
+                result = True
+
+            message = 'Publication fields validated, starting...'
             result = True
 
         timestamp_format = '[%H:%M:%S]'
@@ -101,14 +118,14 @@ class App(QMainWindow):
         # Execute
         self.threadpool.start(worker)
 
-    def start_install(self):
+    def start_install(self, progress_callback):
         if self.field_validation('installation'):
             installation = install.Wordpress(self.installation_variables)
-            installation.run()
+            installation.start()
 
     def start_publish(self, progress_callback):
-        progress_callback.emit('Fields Validated')
         if self.field_validation('publish'):
+            progress_callback.emit('Fields Validated')
             # Create a new server
             progress_callback.emit('Checking service type')
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
@@ -142,13 +159,24 @@ class App(QMainWindow):
 
     def publish_trigger(self):
         # Pass the function to execute
-        worker = workers.Worker(self.start_publish)
-        worker.signals.finished.connect(self.thread_complete)
-        worker.signals.result.connect(self.print_output)
-        worker.signals.progress.connect(self.progress_fn)
+        publication_worker = workers.Worker(self.start_publish)
+        publication_worker.signals.finished.connect(self.thread_complete)
+        publication_worker.signals.result.connect(self.print_output)
+        publication_worker.signals.progress.connect(self.progress_fn)
 
         # Execute
         self.threadpool.start(worker)
+
+
+    def install_trigger(self):
+        # Pass the function to execute
+        installation_worker = workers.Worker(self.start_install)
+        installation_worker.signals.finished.connect(self.thread_complete)
+        installation_worker.signals.result.connect(self.print_output)
+        installation_worker.signals.progress.connect(self.progress_fn)
+
+        # Execute
+        self.threadpool.start(installation_worker)
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()
@@ -163,7 +191,7 @@ class App(QMainWindow):
 
         # Start buttons
         installation_start_button = self.ui.installation_start_button
-        installation_start_button.clicked.connect(self.start_install)
+        installation_start_button.clicked.connect(self.install_trigger)
 
         publish_start_button = self.ui.publish_start_button
         publish_start_button.clicked.connect(self.publish_trigger)
