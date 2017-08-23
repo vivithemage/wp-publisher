@@ -1,5 +1,44 @@
-import os, io, requests, zipfile, logging
+import os
+import io
+import requests
+import zipfile
+import logging
+import pymysql.cursors
 
+from wppublisher.database import mysql
+
+
+class Database:
+    def __init__(self, variables):
+        self.variables = variables
+
+    def generate_database_name(self):
+        site_url = self.variables['site_url']
+        site_url_split = site_url.split('.')
+        database_name = site_url_split[0]
+        return database_name
+
+    def create_database(self):
+        # Connect to the database
+        print(self.variables)
+        connection = pymysql.connect(host=self.variables['database']['hostname'],
+                                     user=self.variables['database']['username'],
+                                     password=self.variables['database']['password'],
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+
+        try:
+            with connection.cursor() as cursor:
+                # Create a new record
+                sql = "create database " + self.generate_database_name()
+                cursor.execute(sql)
+
+            # connection is not autocommit by default. So you must commit to save
+            # your changes.
+            connection.commit()
+
+        finally:
+            connection.close()
 
 class Wordpress:
     def __init__(self, variables):
@@ -12,8 +51,7 @@ class Wordpress:
         self.installation_folder = self.variables['path'] + '/' + self.variables['site_url']
         self.config_file = self.installation_folder + '/wp-config.php'
 
-    def create_database(self):
-        self.logger.info('Creating database')
+
 
     def write_config_variables(self):
         # Read in the file
@@ -56,4 +94,11 @@ class Wordpress:
         self.change_installation_path()
         self.rename_sample_config()
         self.write_config_variables()
+
+        '''
+        Create blank database on server
+        '''
+        db = Database(self.variables)
+        db.create_database()
+
         self.logger.info('Finished Installation')

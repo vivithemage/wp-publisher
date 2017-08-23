@@ -5,6 +5,8 @@ import paramiko
 import time
 import zipfile
 
+from wppublisher.database import mysql
+
 '''
 Puts the wp installation and puts it on the server.
 It wraps the folder up, uploads and extracts.
@@ -38,7 +40,7 @@ class Uploader:
         return True
 
 '''
-Configure the server to suit
+Using the ssh details, log in over ssh and Configure the server to suit.
 '''
 class Configuration():
     def __init__(self, ipv4_address, ssh_username, ssh_password, vps, gui_variables):
@@ -59,10 +61,10 @@ class Configuration():
 
     def get_mysql_password(self, ssh_client):
         command = 'cat /root/.digitalocean_password'
-        result = ssh_client.exec_command(command)
-        stripped_result = result.replace('root_mysql_pass=', '')
+        stdin, stdout, stderr = ssh_client.exec_command(command)
+        result = stdout.readlines()
+        stripped_result = result[0].replace('root_mysql_pass=', '')
         self.vps_mysql_password = stripped_result.replace('"', '')
-        print (self.vps_mysql_password)
 
 
     def run_init_commands(self, ssh_client):
@@ -124,10 +126,7 @@ class Configuration():
 
 '''
 Does all the vitals to get the server up and running and returns the details to make a ssh connection.
-In this case it's Digital Ocean.
 '''
-
-
 class ServerInit:
     def __init__(self, variables):
         super(ServerInit, self).__init__()
