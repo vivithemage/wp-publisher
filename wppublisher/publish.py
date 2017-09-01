@@ -138,7 +138,7 @@ class ServerInit:
         # TODO have this generate a random password
         self.password = '5N73XvQN94UCLQWBkeMe8Nqt'
         self.ip_address_v4 = None
-        self.cloud_init_path = 'user_data.txt'
+        self.cloud_init_path = 'bash/user_data.txt'
 
         with open(self.cloud_init_path, 'r') as cloud_init_file:
             user_data = cloud_init_file.read()

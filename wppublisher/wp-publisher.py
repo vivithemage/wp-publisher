@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtWidgets
 
-from ui import gui
+import gui
 
 def catch_exceptions(t, val, tb):
     QtWidgets.QMessageBox.critical(None,

@@ -3,10 +3,10 @@ import datetime
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 
-from ui import generated
-from push import publish
-from initialize import install
-from multithreading import workers
+import generated
+import publish
+import install
+import workers
 
 
 class Fields():
@@ -132,10 +132,13 @@ class App(QMainWindow):
         else:
             progress_callback.emit(error_message)
 
+    '''
+    Check all the fields and other details are there before beginning
+    '''
     def start_publish(self, progress_callback):
         fields = Fields()
-        self.get_installation_variables()
-        valid, error_message = fields.valid('publish', self.installation_variables)
+        self.get_publish_variables()
+        valid, error_message = fields.valid('publish', self.publish_variables)
 
         if valid:
             progress_callback.emit('Publish Fields Validated')
@@ -158,6 +161,8 @@ class App(QMainWindow):
             vps_configuration.run()
             progress_callback.emit('Finished Configuration')
             progress_callback.emit('Uploading files')
+        else:
+            progress_callback.emit(error_message)
 
     def publish_trigger(self):
         publication_worker = workers.Worker(self.start_publish)
