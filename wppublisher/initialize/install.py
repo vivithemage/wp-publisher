@@ -5,9 +5,6 @@ import zipfile
 import logging
 import pymysql.cursors
 
-from wppublisher.database import mysql
-
-
 class Database:
     def __init__(self, variables):
         self.variables = variables
@@ -50,8 +47,6 @@ class Wordpress:
 
         self.installation_folder = self.variables['path'] + '/' + self.variables['site_url']
         self.config_file = self.installation_folder + '/wp-config.php'
-
-
 
     def write_config_variables(self):
         # Read in the file

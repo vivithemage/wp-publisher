@@ -5,8 +5,6 @@ import paramiko
 import time
 import zipfile
 
-from wppublisher.database import mysql
-
 '''
 Puts the wp installation and puts it on the server.
 It wraps the folder up, uploads and extracts.
