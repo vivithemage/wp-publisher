@@ -20,15 +20,15 @@ class Uploader:
         zip_path = self.installation_path
         shutil.make_archive(zip_path, 'zip', self.installation_path)
 
-        return zip_path
+        return zip_path + '.zip'
 
     def send(self):
-        remote_zip_path = '/home/thrive/' + self.site_url + '.zip'
+        remote_zip_path = '/root/' + self.site_url + '.zip'
         zip_path = self._prepare()
 
         self.client.get_transport()
         sftp = self.client.open_sftp()
-        sftp.put(zip_path + '.zip', remote_zip_path)
+        sftp.put(zip_path , remote_zip_path)
 
         self.remote_extract()
 
@@ -45,7 +45,7 @@ class Configuration():
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-        self.ssh_init_path = 'init.sh'
+        self.ssh_init_path = 'bash/init.sh'
         self.ipv4_address = ipv4_address
         self.ssh_username = ssh_username
         self.ssh_password = ssh_password
