@@ -3,38 +3,38 @@ import digitalocean
 import logging
 import paramiko
 import time
-import zipfile
+import shutil
+
 
 '''
 Puts the wp installation and puts it on the server.
 It wraps the folder up, uploads and extracts.
 '''
-
-
 class Uploader:
-    def __init__(self, client):
+    def __init__(self, client, gui_variables):
         self.client = client
+        self.installation_path = gui_variables['installation_path']
+        self.site_url = gui_variables['site_url']
 
-    def prepare(self, path):
-        zipf = zipfile.ZipFile('test.com.zip', 'w', zipfile.ZIP_DEFLATED)
+    def _prepare(self):
+        zip_path = self.installation_path
+        shutil.make_archive(zip_path, 'zip', self.installation_path)
 
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                zipf.write(os.path.join(root, file))
+        return zip_path
 
-        zipf.close()
+    def send(self):
+        remote_zip_path = '/home/thrive/' + self.site_url + '.zip'
+        zip_path = self._prepare()
 
-        return True
-
-    def put(self):
-        self.prepare('C:/Users/vivi/workspace/wp-publisher/wppublisher/test.com/')
         self.client.get_transport()
         sftp = self.client.open_sftp()
-        sftp.put('C:/Users/vivi/workspace/wp-publisher/wppublisher/test.com/index.php', '/root/index.php')
-        self.unload()
+        sftp.put(zip_path + '.zip', remote_zip_path)
+
+        self.remote_extract()
+
         return True
 
-    def unload(self):
+    def remote_extract(self):
         return True
 
 '''
@@ -52,7 +52,6 @@ class Configuration():
         self.gui_variables = gui_variables
         self.vps_instance = vps
         self.vps_mysql_password = None
-
 
     def replace_ssh_command_variables(self, line):
         return line
@@ -90,11 +89,9 @@ class Configuration():
 
         return client
 
-
     '''
     Additional configuration to prepare the site to host wp
     '''
-
     def run(self):
         grace_period_seconds = 60
         max_check_seconds = 60
@@ -112,15 +109,14 @@ class Configuration():
 
         ssh_client = self.open_ssh_connection()
 
-        transport = Uploader(ssh_client)
-        transport.put()
+        transport = Uploader(ssh_client, self.gui_variables)
+        transport.send()
 
         self.get_mysql_password(ssh_client)
 
         self.run_init_commands(ssh_client)
 
         ssh_client.close()
-
 
 '''
 Does all the vitals to get the server up and running and returns the details to make a ssh connection.
@@ -143,6 +139,7 @@ class ServerInit:
         with open(self.cloud_init_path, 'r') as cloud_init_file:
             user_data = cloud_init_file.read()
 
+        # TODO enable v6 address and monitoring
         self.instance = digitalocean.Droplet(token=self.api_key,
                                         name='lemptest',
                                         region='lon1',
