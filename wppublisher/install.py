@@ -48,15 +48,16 @@ class Wordpress:
         self.installation_folder = self.variables['path'] + '/' + self.variables['site_url']
         self.config_file = self.installation_folder + '/wp-config.php'
 
-    def write_config_variables(self):
+    def write_config_variables(self, database_name):
         # Read in the file
         with open(self.config_file, 'r') as file:
             filedata = file.read()
 
         # Replace the database placeholder variables
-        filedata = filedata.replace('database_name_here', self.variables['database']['hostname'])
+        filedata = filedata.replace('database_name_here', database_name)
         filedata = filedata.replace('username_here', self.variables['database']['username'])
-        filedata = filedata.replace('localhost', self.variables['database']['password'])
+        filedata = filedata.replace('password_here', self.variables['database']['password'])
+        filedata = filedata.replace('localhost', self.variables['database']['hostname'])
 
         # Write the file out again
         with open(self.config_file, 'w') as file:
@@ -85,15 +86,16 @@ class Wordpress:
         os.rename(source, destination)
 
     def start(self):
-        self.download_and_extract()
-        self.change_installation_path()
-        self.rename_sample_config()
-        self.write_config_variables()
-
         '''
         Create blank database on server
         '''
         db = Database(self.variables)
         db.create_database()
+        database_name = db.generate_database_name()
+
+        self.download_and_extract()
+        self.change_installation_path()
+        self.rename_sample_config()
+        self.write_config_variables(database_name)
 
         self.logger.info('Finished Installation')

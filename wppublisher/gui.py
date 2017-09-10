@@ -145,9 +145,13 @@ class App(QMainWindow):
             # Create a new server
             progress_callback.emit('Checking service type')
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
-                progress_callback.emit('Using servivce: ' + self.publish_variables['cloud_service'])
+                progress_callback.emit('Using service: ' + self.publish_variables['cloud_service'])
                 vps = publish.ServerInit(self.publish_variables)
                 ipv4_address, username, password = vps.run()
+
+                if (ipv4_address == ""):
+                    progress_callback.emit('An error occured when creating the vps, halting')
+
                 progress_callback.emit('Spun up server. Details are:')
                 progress_callback.emit('ipv4 address:' + ipv4_address)
                 progress_callback.emit('username: ' + username)

@@ -1,4 +1,3 @@
-import os
 import digitalocean
 import logging
 import paramiko
@@ -45,7 +44,7 @@ class Configuration():
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-        self.ssh_init_path = 'bash/init.sh'
+        self.ssh_init_path = 'config/init.sh'
         self.ipv4_address = ipv4_address
         self.ssh_username = ssh_username
         self.ssh_password = ssh_password
@@ -134,7 +133,7 @@ class ServerInit:
         # TODO have this generate a random password
         self.password = '5N73XvQN94UCLQWBkeMe8Nqt'
         self.ip_address_v4 = None
-        self.cloud_init_path = 'bash/user_data.txt'
+        self.cloud_init_path = 'config/user_data.txt'
 
         with open(self.cloud_init_path, 'r') as cloud_init_file:
             user_data = cloud_init_file.read()
