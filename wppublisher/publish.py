@@ -3,13 +3,20 @@ import logging
 import paramiko
 import time
 import shutil
+import random
+import string
+
+def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
+    generated_password = ''.join(random.choice(chars) for x in range(size))
+
+    return generated_password
 
 
 '''
 Puts the wp installation and puts it on the server.
 It wraps the folder up, uploads and extracts.
 '''
-class Uploader:
+class SiteTransport:
     def __init__(self, client, gui_variables):
         self.client = client
         self.installation_path = gui_variables['installation_path']
@@ -21,7 +28,7 @@ class Uploader:
 
         return zip_path + '.zip'
 
-    def send(self):
+    def upload(self):
         remote_zip_path = '/root/' + self.site_url + '.zip'
         zip_path = self._prepare()
 
@@ -35,6 +42,19 @@ class Uploader:
 
     def remote_extract(self):
         return True
+
+
+class NginxConfigTransport:
+    def __init__(self):
+        self.config_path = 'config/nginx_config.conf'
+
+    def generate(self):
+        self.vps_nginx_config_path
+        self.logger.info('Generating server config')
+
+    def upload(self):
+        self.logger.info('Uploading server config')
+
 
 '''
 Using the ssh details, log in over ssh and Configure the server to suit.
@@ -52,9 +72,16 @@ class Configuration():
         self.vps_instance = vps
         self.vps_mysql_password = None
 
+    '''
+    Checks each line for any variables that need replacing.
+    For instance {site_url} would need replacing with whatever was entered in the ui.
+    '''
     def replace_ssh_command_variables(self, line):
         return line
 
+    '''
+    Fetch the remote password on the production server
+    '''
     def get_mysql_password(self, ssh_client):
         command = 'cat /root/.digitalocean_password'
         stdin, stdout, stderr = ssh_client.exec_command(command)
@@ -89,9 +116,11 @@ class Configuration():
         return client
 
     '''
-    Additional configuration to prepare the site to host wp
+    Wait a while after the server is spun up so it has a chance to boot.
+    Play about with this, sometime the servers don't spin up under 60 seconds
+    for whatever reason so just try again.
     '''
-    def run(self):
+    def grace_period(self):
         grace_period_seconds = 60
         max_check_seconds = 60
 
@@ -106,13 +135,21 @@ class Configuration():
         self.logger.info('Server spun up, additional %d second ssh grace period: ' % grace_period_seconds)
         time.sleep(grace_period_seconds)
 
+
+    '''
+    Additional configuration to prepare the site to host wp
+    '''
+    def run(self):
+        self.grace_period()
         ssh_client = self.open_ssh_connection()
 
-        transport = Uploader(ssh_client, self.gui_variables)
-        transport.send()
+        transport = SiteTransport(ssh_client, self.gui_variables)
+        transport.upload()
+
+        webserver_config = NginxConfigTransport()
+        webserver_config.upload()
 
         self.get_mysql_password(ssh_client)
-
         self.run_init_commands(ssh_client)
 
         ssh_client.close()
@@ -127,24 +164,37 @@ class ServerInit:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
+        #TODO pull from field
         self.api_key = "20f03956273725fe5a6133e5ebcb93de2ea5c454cd8461881ae6cff96c43d50a"
 
         self.username = 'root'
-        # TODO have this generate a random password
-        self.password = '5N73XvQN94UCLQWBkeMe8Nqt'
+        self.password = password_generator()
         self.ip_address_v4 = None
-        self.cloud_init_path = 'config/user_data.txt'
+        user_data = self.get_user_data()
 
-        with open(self.cloud_init_path, 'r') as cloud_init_file:
-            user_data = cloud_init_file.read()
+        '''
+        Digitalocean server details
+        '''
+        DO_server_image = 'lemp-16-04';
+        DO_server_name = variables['site_url'] + '-wp'
+        DO_region = 'lon1'
+        DO_ram = '512mb'
 
         # TODO enable v6 address and monitoring
         self.instance = digitalocean.Droplet(token=self.api_key,
-                                        name='lemptest',
-                                        region='lon1',
-                                        image='lemp-16-04',
-                                        size_slug='512mb',
-                                        user_data=user_data)
+                                             name=DO_server_name,
+                                             region=DO_region,
+                                             image=DO_server_image,
+                                             size_slug=DO_ram,
+                                             user_data=user_data)
+
+    def get_user_data(self):
+        cloud_init_path = 'config/user_data.txt'
+
+        with open(cloud_init_path, 'r') as cloud_init_file:
+            user_data_raw = cloud_init_file.read()
+            user_data = user_data_raw.replace('{generated_password}', self.password)
+            return user_data
 
     '''
     !!CAUTION!! Never use this on a production account.

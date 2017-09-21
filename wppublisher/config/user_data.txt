@@ -12,5 +12,5 @@ runcmd:
 
 chpasswd:
     list: |
-        root:5N73XvQN94UCLQWBkeMe8Nqt
+        root:{generated_password}
     expire: False
