@@ -1,16 +1,19 @@
 import digitalocean
+import os
 import logging
 import paramiko
 import time
 import shutil
 import random
 import string
+import traceback
+import tempfile
+
 
 def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
     generated_password = ''.join(random.choice(chars) for x in range(size))
 
     return generated_password
-
 
 '''
 Puts the wp installation and puts it on the server.
@@ -34,27 +37,53 @@ class SiteTransport:
 
         self.client.get_transport()
         sftp = self.client.open_sftp()
-        sftp.put(zip_path , remote_zip_path)
+        sftp.put(zip_path, remote_zip_path)
 
         self.remote_extract()
 
         return True
 
+    #TODO
     def remote_extract(self):
         return True
 
 
 class NginxConfigTransport:
-    def __init__(self):
-        self.config_path = 'config/nginx_config.conf'
+    def __init__(self, client, gui_variables):
+        self.config_path_template = 'config/nginx_config.conf'
+        self.site_url = gui_variables['site_url']
+        self.client = client
+        self.temp_dir = tempfile.mkdtemp()
 
-    def generate(self):
-        self.vps_nginx_config_path
-        self.logger.info('Generating server config')
+    def _generate(self):
+        with open(self.config_path_template, 'r') as f:
+            nginx_config_raw = f.read()
+            nginx_config = nginx_config_raw.replace('{site_url}', self.site_url)
+            return nginx_config
+
+    def _save(self, nginx_config):
+        filename = self.temp_dir + '\\' + self.site_url + '_config.txt'
+        file = open(filename, "w")
+        file.write(nginx_config)
+        file.close()
+
+        return filename
 
     def upload(self):
-        self.logger.info('Uploading server config')
+        remote_config_path = '/etc/nginx/sites-enabled/' + self.site_url + '.conf'
 
+        nginx_config = self._generate()
+        local_config_path = self._save(nginx_config)
+
+        self.client.get_transport()
+        sftp = self.client.open_sftp()
+
+        if os.path.isfile(local_config_path):
+            sftp.put(local_config_path, remote_config_path)
+            os.remove(local_config_path)
+            os.removedirs(self.temp_dir)
+
+            return True
 
 '''
 Using the ssh details, log in over ssh and Configure the server to suit.
@@ -88,7 +117,6 @@ class Configuration():
         result = stdout.readlines()
         stripped_result = result[0].replace('root_mysql_pass=', '')
         self.vps_mysql_password = stripped_result.replace('"', '')
-
 
     def run_init_commands(self, ssh_client):
         with open(self.ssh_init_path) as f:
@@ -146,7 +174,7 @@ class Configuration():
         transport = SiteTransport(ssh_client, self.gui_variables)
         transport.upload()
 
-        webserver_config = NginxConfigTransport()
+        webserver_config = NginxConfigTransport(ssh_client, self.gui_variables)
         webserver_config.upload()
 
         self.get_mysql_password(ssh_client)
@@ -188,6 +216,10 @@ class ServerInit:
                                              size_slug=DO_ram,
                                              user_data=user_data)
 
+    '''
+    TODO change password after intial boot. User data is not encrypted as far
+    as I know.
+    '''
     def get_user_data(self):
         cloud_init_path = 'config/user_data.txt'
 
