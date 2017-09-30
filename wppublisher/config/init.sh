@@ -1,9 +1,14 @@
+#!/usr/bin/env bash
+# variables
+# ssh_username
+# database_name
+# mysql_password
+
 echo "Starting Software installations";
 apt-get install unzip -y;
 apt-get install php-mbstring -y;
 apt-get install php-gd -y;
 apt-get install php-imagick -y;
-#apt-get install automysqlbackup -y;
 
 echo "Creating Users"
 sudo adduser --disabled-password --gecos "" thrive;
@@ -19,7 +24,8 @@ chown -R --verbose thrive:www-data /home/thrive/SSL;
 chmod -R --verbose 775 public_html/;
 
 echo "Importing database";
-mysql -u root -p wp_database < wp_database.sql;
+mysql --user="root" --password="{mysql_password}" --execute="CREATE DATABASE {database_name};"
+mysql --user="root" --password="{mysql_password}" {database_name} < {database_name}.sql
 
 echo "Setting up webserver"
 rm /etc/nginx/sites-enabled/digitalocean;

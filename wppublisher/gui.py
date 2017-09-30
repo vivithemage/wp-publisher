@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
 
 import generated
 import publish
-import install
+import wordpress
 import workers
 
 
@@ -126,7 +126,8 @@ class App(QMainWindow):
         valid, error_message = fields.valid('installation', self.installation_variables)
 
         if valid:
-            installation = install.Wordpress(self.installation_variables)
+            progress_callback.emit('Starting Install')
+            installation = wordpress.Wordpress(self.installation_variables)
             installation.start()
             progress_callback.emit('Finished installation')
         else:
