@@ -25,9 +25,8 @@ TODO Change this function so it works based on regular expressions instead
 
 
 class WpConfig:
-    def __init__(self, config_file_path, variables):
+    def __init__(self, config_file_path):
         self.config_file_path = config_file_path
-        self.variables = variables
 
     def _get_single_variable(self, identifier, line):
         regex = "define\('" + identifier + "', '(.+?)'"
@@ -44,8 +43,8 @@ class WpConfig:
             return database_result.group(1)
 
 
-    def read(self, wp_config_path, wp_config_variables):
-        #wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_USER', 'DB_PASSWORD')
+    def read(self, wp_config_path):
+        wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_USER', 'DB_PASSWORD')
         wp_config_results = {}
 
         file = open(wp_config_path, "r")
@@ -60,16 +59,17 @@ class WpConfig:
         return wp_config_results
 
 
-    def write(self, database_name):
+    def write(self, db_name='wp_site_db', db_username='root', db_password='root',
+              db_hostname='localhost'):
         # Read in the file
         with open(self.config_file_path, 'r') as file:
             filedata = file.read()
 
         # Replace the database placeholder variables
-        filedata = filedata.replace('database_name_here', database_name)
-        filedata = filedata.replace('username_here', self.variables['database']['username'])
-        filedata = filedata.replace('password_here', self.variables['database']['password'])
-        filedata = filedata.replace('localhost', self.variables['database']['hostname'])
+        filedata = filedata.replace('database_name_here', db_name)
+        filedata = filedata.replace('username_here', db_username)
+        filedata = filedata.replace('password_here', db_password)
+        filedata = filedata.replace('localhost', db_hostname)
 
         # Write the file out again
         with open(self.config_file_path, 'w') as file:
@@ -118,7 +118,11 @@ class Wordpress:
         self.change_installation_path()
         self.rename_sample_config()
 
-        wp_config = WpConfig(self.installation_folder + '/wp-config.php', self.variables)
-        wp_config.write(database_name)
+        wp_config_path = self.installation_folder + '/wp-config.php'
+        wp_config = WpConfig(wp_config_path)
+        wp_config.write(db_name=database_name,
+                        db_username=self.variables['database']['username'],
+                        db_password=self.variables['database']['password'],
+                        db_hostname=self.variables['database']['hostname'])
 
         self.logger.info('Finished Installation')
