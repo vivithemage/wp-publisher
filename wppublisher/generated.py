@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'front_end_design_main_window.ui'
+# Form implementation generated from reading ui file '.\front_end_design_main_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.8.2
 #
@@ -56,6 +56,8 @@ class Ui_MainWindow(object):
         self.installation_site_url.setObjectName("installation_site_url")
         self.installation_site_url_text = QtWidgets.QLineEdit(self.installation_site_group_box)
         self.installation_site_url_text.setGeometry(QtCore.QRect(120, 50, 191, 20))
+        self.installation_site_url_text.setDragEnabled(False)
+        self.installation_site_url_text.setClearButtonEnabled(False)
         self.installation_site_url_text.setObjectName("installation_site_url_text")
         self.installation_database_group_box = QtWidgets.QGroupBox(self.initialize_tab)
         self.installation_database_group_box.setGeometry(QtCore.QRect(10, 170, 411, 101))
@@ -122,18 +124,9 @@ class Ui_MainWindow(object):
         self.logs_output_text_box.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.logs_output_text_box.setObjectName("logs_output_text_box")
         self.main_tab.addTab(self.logs_tab, "")
-        self.label = QtWidgets.QLabel(self.centralWidget)
-        self.label.setGeometry(QtCore.QRect(140, 10, 111, 16))
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.centralWidget)
-        self.label_2.setGeometry(QtCore.QRect(140, 20, 61, 16))
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralWidget)
-        self.label_3.setGeometry(QtCore.QRect(280, 30, 181, 16))
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(self.centralWidget)
-        self.label_4.setGeometry(QtCore.QRect(280, 40, 181, 20))
-        self.label_4.setObjectName("label_4")
+        self.about_button = QtWidgets.QPushButton(self.centralWidget)
+        self.about_button.setGeometry(QtCore.QRect(380, 30, 75, 23))
+        self.about_button.setObjectName("about_button")
         MainWindow.setCentralWidget(self.centralWidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
@@ -144,6 +137,22 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.main_tab.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.main_tab, self.installation_path_text)
+        MainWindow.setTabOrder(self.installation_path_text, self.installation_path_file_selector)
+        MainWindow.setTabOrder(self.installation_path_file_selector, self.installation_site_url_text)
+        MainWindow.setTabOrder(self.installation_site_url_text, self.installation_username_text)
+        MainWindow.setTabOrder(self.installation_username_text, self.installation_site_name_text)
+        MainWindow.setTabOrder(self.installation_site_name_text, self.installation_database_hostname_text)
+        MainWindow.setTabOrder(self.installation_database_hostname_text, self.installation_database_username_text)
+        MainWindow.setTabOrder(self.installation_database_username_text, self.installation_database_password_text)
+        MainWindow.setTabOrder(self.installation_database_password_text, self.installation_start_button)
+        MainWindow.setTabOrder(self.installation_start_button, self.publish_api_key_text)
+        MainWindow.setTabOrder(self.publish_api_key_text, self.publish_installation_path_text)
+        MainWindow.setTabOrder(self.publish_installation_path_text, self.publish_installation_path_selector)
+        MainWindow.setTabOrder(self.publish_installation_path_selector, self.publish_site_url_text)
+        MainWindow.setTabOrder(self.publish_site_url_text, self.publish_start_button)
+        MainWindow.setTabOrder(self.publish_start_button, self.logs_output_text_box)
+        MainWindow.setTabOrder(self.logs_output_text_box, self.about_button)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -155,6 +164,7 @@ class Ui_MainWindow(object):
         self.installation_username_label.setText(_translate("MainWindow", "Username"))
         self.installation_site_name.setText(_translate("MainWindow", "Site Name"))
         self.installation_site_url.setText(_translate("MainWindow", "Site Url"))
+        self.installation_site_url_text.setToolTip(_translate("MainWindow", "Add the url that will be used for the wordpress site (e.g. example.com)"))
         self.installation_database_group_box.setTitle(_translate("MainWindow", "Database"))
         self.installation_database_hostname_label.setText(_translate("MainWindow", "Hostname"))
         self.installation_database_username_label.setText(_translate("MainWindow", "Username"))
@@ -175,10 +185,7 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.main_tab.setTabText(self.main_tab.indexOf(self.logs_tab), _translate("MainWindow", "Logs"))
-        self.label.setText(_translate("MainWindow", "Author: Reza Snowdon"))
-        self.label_2.setText(_translate("MainWindow", "Version: 0.5"))
-        self.label_3.setText(_translate("MainWindow", "Initialize: set up a new installation"))
-        self.label_4.setText(_translate("MainWindow", "Publish: create vps and upload site"))
+        self.about_button.setText(_translate("MainWindow", "About"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
 
 

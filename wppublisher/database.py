@@ -8,6 +8,8 @@ class Database:
         site_url = self.variables['site_url']
         site_url_split = site_url.split('.')
         database_name = site_url_split[0]
+        database_name = database_name.replace('-', '')
+
         return database_name
 
     def create_database(self):

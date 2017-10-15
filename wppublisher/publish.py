@@ -9,6 +9,7 @@ import string
 import traceback
 import tempfile
 
+import wordpress
 
 def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
     generated_password = ''.join(random.choice(chars) for x in range(size))
@@ -43,7 +44,7 @@ class SiteTransport:
 
         return True
 
-    #TODO
+    #TODO - currently done using bash script
     def remote_extract(self):
         return True
 
@@ -106,6 +107,13 @@ class Configuration():
     For instance {site_url} would need replacing with whatever was entered in the ui.
     '''
     def replace_ssh_command_variables(self, line):
+        wp_config = wordpress.WpConfig(self.gui_variables['installation_path'] + '/public_html/wp-config.php')
+        wp_config_variables = wp_config.read()
+
+        line = line.replace('{mysql_password}', self.vps_mysql_password)
+        line = line.replace('{ssh_username}', 'thrive')
+        line = line.replace('{database_name}', wp_config_variables['DB_NAME'])
+
         return line
 
     '''
@@ -117,11 +125,13 @@ class Configuration():
         result = stdout.readlines()
         stripped_result = result[0].replace('root_mysql_pass=', '')
         self.vps_mysql_password = stripped_result.replace('"', '')
+        self.vps_mysql_password = self.vps_mysql_password.rstrip()
 
     def run_init_commands(self, ssh_client):
         with open(self.ssh_init_path) as f:
             for line in f:
                 amended_line = self.replace_ssh_command_variables(line)
+                print(amended_line)
                 stdin, stdout, stderr = ssh_client.exec_command(amended_line)
                 self.logger.info(stdout.readlines())
 
@@ -171,13 +181,24 @@ class Configuration():
         self.grace_period()
         ssh_client = self.open_ssh_connection()
 
-        transport = SiteTransport(ssh_client, self.gui_variables)
-        transport.upload()
+        self.get_mysql_password(ssh_client)
+        print(self.gui_variables)
+        wp_config_path = self.gui_variables['installation_path'] + '/public_html/wp-config.php'
+        wp_config = wordpress.WpConfig(wp_config_path)
+        wp_config_vars = wp_config.read()
+
+        wp_config.write(db_name=wp_config_vars['DB_NAME'],
+                        db_username='root',
+                        db_password=wp_config_vars['DB_PASSWORD'],
+                        db_hostname='localhost')
 
         webserver_config = NginxConfigTransport(ssh_client, self.gui_variables)
         webserver_config.upload()
 
-        self.get_mysql_password(ssh_client)
+        transport = SiteTransport(ssh_client, self.gui_variables)
+        transport.upload()
+
+
         self.run_init_commands(ssh_client)
 
         ssh_client.close()

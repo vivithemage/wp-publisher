@@ -43,11 +43,11 @@ class WpConfig:
             return database_result.group(1)
 
 
-    def read(self, wp_config_path):
-        wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_USER', 'DB_PASSWORD')
+    def read(self):
+        wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_PASSWORD')
         wp_config_results = {}
 
-        file = open(wp_config_path, "r")
+        file = open(self.config_file_path, "r")
 
         for line in file:
             for wp_variable in wp_config_variables:

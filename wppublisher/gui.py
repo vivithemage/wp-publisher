@@ -1,7 +1,8 @@
 import datetime
 
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import (QMainWindow, QFileDialog)
+from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox)
+
 
 import generated
 import publish
@@ -70,8 +71,8 @@ class App(QMainWindow):
     def get_installation_variables(self):
         database_variables = {
             'hostname': self.ui.installation_database_hostname_text.text(),
-            'username': self.ui.installation_database_password_text.text(),
-            'password': self.ui.installation_database_username_text.text()
+            'username': self.ui.installation_database_username_text.text(),
+            'password': self.ui.installation_database_password_text.text()
         }
 
         self.installation_variables = {
@@ -169,6 +170,7 @@ class App(QMainWindow):
         else:
             progress_callback.emit(error_message)
 
+    # TODO the functions below do pretty much the same. Merge into generic
     def publish_trigger(self):
         publication_worker = workers.Worker(self.start_publish)
         publication_worker.signals.finished.connect(self.thread_complete)
@@ -184,6 +186,15 @@ class App(QMainWindow):
         installation_worker.signals.progress.connect(self.progress_fn)
 
         self.threadpool.start(installation_worker)
+
+    def about_dialog(self):
+        msg = QMessageBox()
+
+        msg.setWindowTitle("About")
+        msg.setText("Author: rs@mage.me.uk\n"
+                    "Build: 36 (Alpha)")
+        msg.setInformativeText("Let me know if you have any questions. All patches, bug reports and suggestions are most welcome")
+        msg.exec_()
 
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()
@@ -202,5 +213,9 @@ class App(QMainWindow):
 
         publish_start_button = self.ui.publish_start_button
         publish_start_button.clicked.connect(self.publish_trigger)
+
+        # About and additional settings buttons
+        about_button = self.ui.about_button
+        about_button.clicked.connect(self.about_dialog)
 
         self.show()

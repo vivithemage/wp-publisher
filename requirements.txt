@@ -1,2 +1,1 @@
-python-digitalocean
-paramiko
+pip install pyqt5 python-digitalocean paramiko pymysql

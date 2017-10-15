@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>rs@mage.me.uk</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -438,19 +439,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>About</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="additional_setting_button">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>30</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Additional Settings</string>
     </property>
    </widget>
   </widget>
