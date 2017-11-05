@@ -198,7 +198,6 @@ class Configuration():
         transport = SiteTransport(ssh_client, self.gui_variables)
         transport.upload()
 
-
         self.run_init_commands(ssh_client)
 
         ssh_client.close()
@@ -207,7 +206,7 @@ class Configuration():
 Does all the vitals to get the server up and running and returns the details to make a ssh connection.
 '''
 class ServerInit:
-    def __init__(self, variables):
+    def __init__(self, ui_fields):
         super(ServerInit, self).__init__()
 
         logging.basicConfig(level=logging.INFO)
@@ -225,7 +224,7 @@ class ServerInit:
         Digitalocean server details
         '''
         DO_server_image = 'lemp-16-04';
-        DO_server_name = variables['site_url'] + '-wp'
+        DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
         DO_ram = '512mb'
 
