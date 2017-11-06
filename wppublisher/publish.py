@@ -6,7 +6,6 @@ import time
 import shutil
 import random
 import string
-import traceback
 import tempfile
 
 import wordpress
@@ -40,12 +39,6 @@ class SiteTransport:
         sftp = self.client.open_sftp()
         sftp.put(zip_path, remote_zip_path)
 
-        self.remote_extract()
-
-        return True
-
-    #TODO - currently done using bash script
-    def remote_extract(self):
         return True
 
 
@@ -283,7 +276,8 @@ class ServerInit:
 
     def run(self):
         self.logger.info("Removing old machines")
-        self.dev_housekeeping()
+        # Careful - do not use in production!
+        #self.dev_housekeeping()
 
         self.logger.info('Starting spin up')
         self.spin_up()
