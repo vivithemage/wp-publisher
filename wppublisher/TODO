@@ -1,0 +1,70 @@
+    - Make spin up on digital ocean smarter. Currently it can spit out a lot of rubbish before it gets started properly
+     (see appendix A)
+
+    - Display more on the log tab
+
+    - Add wordmove config to folder when starting new installation
+
+    - Clean up the WpConfig class. It's far too complicated for what it does.
+
+
+
+Appendix A
+----------
+
+C:\Users\vivi\AppData\Local\Programs\Python\Python36-32\python.exe C:/Users/vivi/workspace/wp-publisher/wppublisher/wp-publisher.py
+Multithreading with maximum 8 threads
+INFO:publish:Removing old machines
+INFO:publish:Starting spin up
+INFO:publish:Successfully spun up server
+Finished Thread
+Traceback (most recent call last):
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\workers.py", line 65, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\gui.py", line 158, in start_publish
+    progress_callback.emit('ipv4 address:' + ipv4_address)
+TypeError: must be str, not NoneType
+INFO:publish:Removing old machines
+INFO:publish:Starting spin up
+INFO:publish:Successfully spun up server
+Finished Thread
+Traceback (most recent call last):
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\workers.py", line 65, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\gui.py", line 158, in start_publish
+    progress_callback.emit('ipv4 address:' + ipv4_address)
+TypeError: must be str, not NoneType
+INFO:publish:Removing old machines
+Finished Thread
+Traceback (most recent call last):
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\workers.py", line 65, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\gui.py", line 152, in start_publish
+    ipv4_address, username, password = vps.run()
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\publish.py", line 286, in run
+    self.dev_housekeeping()
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\publish.py", line 259, in dev_housekeeping
+    droplet.destroy()
+  File "C:\Users\vivi\AppData\Local\Programs\Python\Python36-32\lib\site-packages\digitalocean\Droplet.py", line 415, in destroy
+    return self.get_data("droplets/%s" % self.id, type=DELETE)
+  File "C:\Users\vivi\AppData\Local\Programs\Python\Python36-32\lib\site-packages\digitalocean\Droplet.py", line 162, in get_data
+    data = super(Droplet, self).get_data(*args, **kwargs)
+  File "C:\Users\vivi\AppData\Local\Programs\Python\Python36-32\lib\site-packages\digitalocean\baseapi.py", line 162, in get_data
+    raise NotFoundError()
+digitalocean.baseapi.NotFoundError
+INFO:publish:Removing old machines
+INFO:publish:Starting spin up
+INFO:publish:Successfully spun up server
+Traceback (most recent call last):
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\workers.py", line 65, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\vivi\workspace\wp-publisher\wppublisher\gui.py", line 158, in start_publish
+    progress_callback.emit('ipv4 address:' + ipv4_address)
+Finished Thread
+TypeError: must be str, not NoneType
+INFO:publish:Removing old machines
+INFO:publish:Starting spin up
+INFO:publish:Successfully spun up server
+INFO:publish:Current Status: in-progress
+INFO:publish:Server not ready, waiting: 0 seconds so far
+INFO:publish:Current Status: in-progress

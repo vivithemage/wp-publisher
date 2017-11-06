@@ -43,7 +43,7 @@ class WpConfig:
 
     def _set_single_variable(self, key, value, line):
         search_regex = "define\('" + key + "', '(.+?)'"
-        replace_regex = "define('" + key + "', '" + value + "')"
+        replace_regex = "define('" + key + "', '" + value + "'"
 
         if re.search(search_regex, line):
             return re.sub(search_regex, replace_regex, line)

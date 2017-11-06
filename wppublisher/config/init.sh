@@ -25,8 +25,3 @@ mysql --user="root" --password="{mysql_password}" {database_name} < /home/thrive
 echo "Setting up webserver";
 rm /etc/nginx/sites-enabled/digitalocean;
 /etc/init.d/nginx restart;
-echo "Updating system after install";
-export DEBIAN_FRONTEND=noninteractive;
-apt-get update -y;
-apt-get upgrade -y;
-apt-get dist-upgrade -y;

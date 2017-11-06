@@ -189,7 +189,7 @@ class Configuration():
 
         wp_config.write(db_name=wp_config_vars['DB_NAME'],
                         db_username='root',
-                        db_password=wp_config_vars['DB_PASSWORD'],
+                        db_password=self.vps_mysql_password,
                         db_hostname='localhost')
 
         webserver_config = NginxConfigTransport(ssh_client, self.gui_variables)
