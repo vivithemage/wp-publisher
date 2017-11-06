@@ -1,9 +1,47 @@
 Overview
 --------
 
-Hopefully something to make wordpress junk easier
+This should allow for quicker initial setup and eventual publication of wordpress sites on standalone vps servers.
+
+Installation
+------------
+
+TODO
+
+Publication
+-----------
+
+Download all the wordpress files and database you would like to use.
+Create the following directories:
+
+blog.example.com/public_html
+blog.example.com/SQL
+
+Place the root (so copy and paste everything in the directory with wp-config.php in) into public_html
+put the sql file into SQL and make sure the sql file has the exact same name as the database name in wp-config.php
+
+Enter the api key and the hostname and press 'start'.
+
+
+Requirements
+------------
 
 Please note that this currently works with python 3.6 only.
+
+To install dependancies do:
+
+    pip install -r requirements.txt
+
+failing that:
+
+    pip install pyqt5 python-digitalocean paramiko pymysql
+
+
+
+Development notes
+-----------------
+
+
 
 Generating the GUI
 ------------------
@@ -24,39 +62,3 @@ Compiling into standalone application
 * Run nuitka (install using pip install nuitka)
 
     nuitka --recurse-all .\wp-publisher.py --standalone --plugin-enable=qt-plugins
-
-Setting up ssh keys
--------------------
-
-* First install puttygen and pageant
-* generate a key
-* save them both somewhere e.g. c:\ssh_keys
-* add the private key to pageant
-* Add the public key to wp-publisher
-
-
-Creating a new installation
----------------------------
-
-	wp-publisher create --username t5_admin --url t5.test.lan
-
-This is if you start a completely new project and want to get started. This wraps around two other key tools, wp-cli and wordmove (both of which should be available globally).
-
-The steps:
-	- create a new folder in public_html 
-
-
-Provision a installation
-------------------------
-
-This populates a new server 
-
-	wp-publisher provision --local-url t5.test.lan --remote-url t5.co.uk
-
-
-Delete a local copy
--------------------
-
-For safety reasons, this just deletes the local copy of the database, files and nginx config. Log in to the VPS provider to delete the production copy which is usually a case of deleting the whole vps.
-
-	wp-publisher delete --local-url t5.test.lan
