@@ -1,12 +1,23 @@
 Overview
 --------
 
-This should allow for quicker initial setup and eventual publication of wordpress sites on standalone vps servers.
+WP Publisher is a gui application that can help drastically speed up local wordpress installation and deployment of to digitalocean servers.
+
+It does this allowing a user to:
+
+1. Install a fresh installation of wordpress locally.
+2. Publish a wordpress website to a new digitalocean server.
+
+If you're working with a WAMP development stack and using a single digitalocean vps for each website you host this will almost certainly help you out! Take a look at the video below.
 
 Installation
 ------------
 
 TODO
+
+## Supports
+
+Tested and working on Windows 7 and 10.
 
 Publication
 -----------
@@ -37,11 +48,28 @@ failing that:
     pip install pyqt5 python-digitalocean paramiko pymysql
 
 
+## Contribute
+
+There's a lot to do and all contributions are very welcome. Please get in touch if you plan to do some work on the project.
+
+The list below details some areas which could do with some attention.
+
+* Add additional error checking on fields (current error checking is very basic).
+* Add error checking to installation path folder (ensure it has public_html and SQL folder)
+* Investigate issue with Digitalocean api failing to return data.
+* Allow for more customization when installing.
+* Push all logging to log window and log file.
+* Create a stand alone exe and installer (see http://nuitka.net/ http://www.py2exe.org/)
+* Integrate with additional cloud server providers (e.g. Amazon, Bytemark).
+* Test on Mac and Linux
+* Integrate with wordmove by creating a movefile.yml in the wordpress directory when initializing a new wordpress instance locally (https://github.com/welaika/wordmove)
+* General improvements to the UI. Maybe an additional options button for people to fine tune the installation (e.g. specify new packages)
+* Currently only supports the the ubuntu lemp digitalocean image. Adding support for other distros would be useful. This was done for speed. It would be 
+* Integrate mysql backups. This has been partially done with: 
+
 
 Development notes
 -----------------
-
-
 
 Generating the GUI
 ------------------
