@@ -93,7 +93,7 @@ class Wordpress:
         self.logger = logging.getLogger(__name__)
 
         self.wp_url = 'https://wordpress.org/latest.zip'
-        self.fields = ui_fields
+        self.ui_fields = ui_fields
 
         self.installation_folder = self.ui_fields['path'] + '/' + self.ui_fields['site_url']
         self.config_file = self.installation_folder + '/wp-config.php'
