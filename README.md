@@ -1,6 +1,6 @@
 ## Overview
 
-WP Publisher is a gui application that can help drastically speed up local wordpress installation and deployment of to digitalocean servers.
+WP Publisher is a gui application that can help drastically speed up local wordpress installation and deployment to digitalocean servers.
 
 It does this allowing a user to:
 
