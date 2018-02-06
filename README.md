@@ -1,5 +1,4 @@
-Overview
---------
+## Overview
 
 WP Publisher is a gui application that can help drastically speed up local wordpress installation and deployment of to digitalocean servers.
 
@@ -8,36 +7,33 @@ It does this allowing a user to:
 1. Install a fresh installation of wordpress locally.
 2. Publish a wordpress website to a new digitalocean server.
 
-If you're working with a WAMP development stack and using a single digitalocean vps for each website you host this will almost certainly help you out! Take a look at the video below.
+If you're working with a WAMP development stack and using a single digitalocean vps for each website you host this will almost certainly help you out! Take a look at the screenshots below.
 
-Installation
-------------
+![Installation](https://raw.githubusercontent.com/vivithemage/do-wp/master/docs/screenshot-install.png)
 
-TODO
+![Publish](https://raw.githubusercontent.com/vivithemage/do-wp/master/docs/screenshot-publish.png)
 
-## Supports
 
-Tested and working on Windows 7 and 10.
+## Quick Start
 
-Publication
------------
+Download the latest windows binary here:
 
-Download all the wordpress files and database you would like to use.
-Create the following directories:
+[wp-publisher-v0.2.exe](http://files.mage.me.uk/wp-publisher-v0.2.exe)
+
+Create the following directory structure:
 
 blog.example.com/public_html
 blog.example.com/SQL
 
 Place the root (so copy and paste everything in the directory with wp-config.php in) into public_html
-put the sql file into SQL and make sure the sql file has the exact same name as the database name in wp-config.php
+put the sql file into SQL and make sure the sql file has *the exact same name as the database name in wp-config.php*.
 
 Enter the api key and the hostname and press 'start'.
 
+After a minute or two you should find the logs tab has the ip and root password. Paste the ip into the browser to see the site live on a new digitalocean server and ssh in to make any tweaks.
 
-Requirements
-------------
 
-Please note that this currently works with python 3.6 only.
+## Installation
 
 To install dependancies do:
 
@@ -48,9 +44,14 @@ failing that:
     pip install pyqt5 python-digitalocean paramiko pymysql
 
 
+## Supports
+
+Tested and working on Windows 7 and 10.
+
+
 ## Contribute
 
-There's a lot to do and all contributions are very welcome. Please get in touch if you plan to do some work on the project.
+There's a lot to do and all contributions are very welcome. Please get in touch if you are interested in contributing to the project. I'll do my best to assist!
 
 The list below details some areas which could do with some attention.
 
@@ -68,25 +69,23 @@ The list below details some areas which could do with some attention.
 * Integrate mysql backups. This has been partially done with: 
 
 
-Development notes
------------------
+## Development notes
 
-Generating the GUI
-------------------
+### Generating the GUI
+
 
 The gui is created in qt creator using the deisnger feature. This is then saved and converted into a
 python class by running the following command:
 
     pyuic5.exe -x .\front_end_design.ui -o front_end.py
 
-Compiling into standalone application
---------------------------------------
 
-* Make sure mingw is installed along with the gcc package.
-* Set the environment variables for the gcc compiler
+### Compiling into standalone application
 
-    $env:CC = "C:\MinGW\bin\mingw32-gcc.exe"
+    pip install pyinstaller
+    
+    pyinstaller.exe --onefile wp-publisher.py
+    
+That should then result in a standalone exe being created in the dist file. Try:
 
-* Run nuitka (install using pip install nuitka)
-
-    nuitka --recurse-all .\wp-publisher.py --standalone --plugin-enable=qt-plugins
+    ls dist
