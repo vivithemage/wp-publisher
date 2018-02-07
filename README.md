@@ -16,9 +16,9 @@ If you're working with a WAMP development stack and using a single digitalocean 
 
 ## Quick Start
 
-Download the latest windows binary here:
+Download the and extract the latest windows binary here:
 
-[wp-publisher-v0.2.exe](http://files.mage.me.uk/wp-publisher-v0.2.exe)
+[wp-publisher-v0.2.zip](http://files.mage.me.uk/wp-publisher-v0.2.zip)
 
 Create the following directory structure:
 
