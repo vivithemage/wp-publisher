@@ -14,25 +14,6 @@ If you're working with a WAMP development stack and using a single digitalocean 
 ![Publish](https://raw.githubusercontent.com/vivithemage/do-wp/master/docs/screenshot-publish.png)
 
 
-## Quick Start
-
-Download the and extract the latest windows binary here:
-
-[wp-publisher-v0.2.zip](http://files.mage.me.uk/wp-publisher-v0.2.zip)
-
-Create the following directory structure:
-
-blog.example.com/public_html
-blog.example.com/SQL
-
-Place the root (so copy and paste everything in the directory with wp-config.php in) into public_html
-put the sql file into SQL and make sure the sql file has *the exact same name as the database name in wp-config.php*.
-
-Enter the api key and the hostname and press 'start'.
-
-After a minute or two you should find the logs tab has the ip and root password. Paste the ip into the browser to see the site live on a new digitalocean server and ssh in to make any tweaks.
-
-
 ## Installation
 
 To install dependancies do:
@@ -43,6 +24,20 @@ failing that:
 
     pip install pyqt5 python-digitalocean paramiko pymysql
 
+
+## Quick Start
+
+Create the following directory structure:
+
+    example.com/public_html
+    example.com/SQL
+
+Place the root (so copy and paste everything in the directory with wp-config.php in) into public_html.
+Place the sql file into SQL and make sure the sql file has *the exact same name as the database name in wp-config.php*.
+
+Enter the api key and the hostname and press 'start'.
+
+After a minute or two you should find the logs tab has the ip and root password. Paste the ip into the browser to see the site live on a new digitalocean server and ssh in to make any tweaks.
 
 ## Supports
 
