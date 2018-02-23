@@ -206,7 +206,7 @@ class ServerInit:
         self.logger = logging.getLogger(__name__)
 
         #TODO pull from field
-        self.api_key = "20f03956273725fe5a6133e5ebcb93de2ea5c454cd8461881ae6cff96c43d50a"
+        self.api_key = ui_fields['api_key']
 
         self.username = 'root'
         self.password = password_generator()
@@ -219,7 +219,7 @@ class ServerInit:
         DO_server_image = 'lemp-16-04';
         DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
-        DO_ram = '512mb'
+        DO_ram = '1024mb'
 
         # TODO enable v6 address and monitoring
         self.instance = digitalocean.Droplet(token=self.api_key,
