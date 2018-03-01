@@ -219,7 +219,7 @@ class ServerInit:
         DO_server_image = 'lemp-16-04';
         DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
-        DO_ram = '1024mb'
+        DO_ram = '512mb'
 
         # TODO enable v6 address and monitoring
         self.instance = digitalocean.Droplet(token=self.api_key,
