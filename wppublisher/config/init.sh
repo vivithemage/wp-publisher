@@ -5,6 +5,7 @@ apt-get install unzip -y;
 apt-get install php-mbstring -y;
 apt-get install php-gd -y;
 apt-get install php-imagick -y;
+apt-get install php-xml -y;
 echo "Creating Users";
 sudo adduser --disabled-password --gecos "" thrive;
 echo thrive:thrive | chpasswd;
