@@ -205,7 +205,6 @@ class ServerInit:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-        #TODO pull from field
         self.api_key = ui_fields['api_key']
 
         self.username = 'root'
@@ -244,16 +243,6 @@ class ServerInit:
             return user_data
 
     '''
-    !!CAUTION!! Never use this on a production account.
-    Used to destroy all servers during development to save coinage
-    '''
-    def dev_housekeeping(self):
-        manager = digitalocean.Manager(token=self.api_key)
-        my_droplets = manager.get_all_droplets()
-        for droplet in my_droplets:
-            droplet.destroy()
-
-    '''
     Once the api returns 'completed', the droplet is up and running
     '''
     def ready(self):
@@ -274,13 +263,11 @@ class ServerInit:
     def spin_up(self):
         self.instance.create()
         self.instance.load()
+        """ Grace period to get """
+        time.sleep(10)
         self.ip_address_v4 = self.instance.ip_address
 
     def run(self):
-        self.logger.info("Removing old machines")
-        # Careful - do not use in production!
-        #self.dev_housekeeping()
-
         self.logger.info('Starting spin up')
         self.spin_up()
         self.logger.info('Successfully spun up server')
