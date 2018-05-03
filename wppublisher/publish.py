@@ -83,12 +83,13 @@ class NginxConfigTransport:
 Using the ssh details, log in over ssh and Configure the server to suit.
 '''
 class Configuration():
-    def __init__(self, ipv4_address, ssh_username, ssh_password, vps, gui_variables):
+    def __init__(self, ssh_username, ssh_password, vps, gui_variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
+        vps.instance.load()
 
         self.ssh_init_path = 'config/init.sh'
-        self.ipv4_address = ipv4_address
+        self.ipv4_address = vps.instance.ip_address
         self.ssh_username = ssh_username
         self.ssh_password = ssh_password
         self.gui_variables = gui_variables
@@ -257,19 +258,10 @@ class ServerInit:
                 self.logger.info('Current Status: ' + action.status)
                 return False
 
-    '''
-    Creates the server instance
-    '''
-    def spin_up(self):
-        self.instance.create()
-        self.instance.load()
-        """ Grace period to get """
-        time.sleep(10)
-        self.ip_address_v4 = self.instance.ip_address
 
     def run(self):
         self.logger.info('Starting spin up')
-        self.spin_up()
+        self.instance.create()
         self.logger.info('Successfully spun up server')
 
-        return self.ip_address_v4, self.username, self.password
+        return self.username, self.password

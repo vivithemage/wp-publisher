@@ -149,22 +149,19 @@ class App(QMainWindow):
             if self.publish_variables['cloud_service'] == 'Digital Ocean':
                 progress_callback.emit('Using service: ' + self.publish_variables['cloud_service'])
                 vps = publish.ServerInit(self.publish_variables)
-                ipv4_address, username, password = vps.run()
-
-                if (ipv4_address == ""):
-                    progress_callback.emit('An error occured when creating the vps, halting')
-
-                progress_callback.emit('Spun up server. Details are:')
-                progress_callback.emit('ipv4 address:' + ipv4_address)
-                progress_callback.emit('username: ' + username)
-                progress_callback.emit('password: ' + password)
+                username, password = vps.run()
 
             '''
             Connect to server and perform all necessary configuration
             '''
             progress_callback.emit('Starting configuration')
-            vps_configuration = publish.Configuration(ipv4_address, username, password, vps, self.publish_variables)
+            vps_configuration = publish.Configuration(username, password, vps, self.publish_variables)
             vps_configuration.run()
+
+            progress_callback.emit('Spun up server. Details are:')
+            progress_callback.emit('ipv4 address:' + vps_configuration.ipv4_address)
+            progress_callback.emit('username: ' + username)
+            progress_callback.emit('password: ' + password)
             progress_callback.emit('Finished Configuration')
             progress_callback.emit('Uploading files')
         else:
