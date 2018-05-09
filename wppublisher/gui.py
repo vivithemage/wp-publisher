@@ -189,7 +189,7 @@ class App(QMainWindow):
 
         msg.setWindowTitle("About")
         msg.setText("Author: rs@mage.me.uk\n"
-                    "Build: 36 (Alpha)")
+                    "Alpha Build")
         msg.setInformativeText("Let me know if you have any questions. All patches, bug reports and suggestions are most welcome")
         msg.exec_()
 

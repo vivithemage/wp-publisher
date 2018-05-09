@@ -10,7 +10,6 @@ apt-get install php7.0-mbstring -y;
 apt-get install vsftpd -y
 echo "Creating Users";
 sudo adduser --disabled-password --gecos "" thrive;
-echo thrive:thrive | chpasswd;
 echo "Extracting Uploaded Site to user directory";
 cd /root;
 unzip '*.zip' -d /home/thrive/;

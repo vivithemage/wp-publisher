@@ -1,6 +1,6 @@
 #cloud-config
 users:
-  - name: demo
+  - name: thrive
     groups: sudo
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
@@ -13,4 +13,5 @@ runcmd:
 chpasswd:
     list: |
         root:{generated_password}
+        thrive:{generated_password}
     expire: False
