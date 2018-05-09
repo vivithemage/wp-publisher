@@ -86,7 +86,13 @@ class Configuration():
     def __init__(self, ssh_username, ssh_password, vps, gui_variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
-        vps.instance.load()
+
+        """ 
+        Keep trying to load until ip is populated. 
+        TODO. This may be an api issue. Take a look.
+        """
+        while vps.instance.ip_address is None:
+            vps.instance.load()
 
         self.ssh_init_path = 'config/init.sh'
         self.ipv4_address = vps.instance.ip_address
