@@ -8,8 +8,6 @@ apt-get install php-imagick -y;
 apt-get install php-xml -y;
 apt-get install php7.0-mbstring -y;
 apt-get install vsftpd -y
-echo "Creating Users";
-sudo adduser --disabled-password --gecos "" thrive;
 echo "Extracting Uploaded Site to user directory";
 cd /root;
 unzip '*.zip' -d /home/thrive/;
