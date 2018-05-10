@@ -6,7 +6,6 @@ apt-get install php-mbstring -y;
 apt-get install php-gd -y;
 apt-get install php-imagick -y;
 apt-get install php-xml -y;
-apt-get install php7.0-mbstring -y;
 apt-get install vsftpd -y
 echo "Extracting Uploaded Site to user directory";
 cd /root;
