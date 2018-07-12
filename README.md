@@ -7,6 +7,8 @@ It does this by allowing a user to:
 1. Install a fresh installation of wordpress locally.
 2. Publish a wordpress website to a new digitalocean server.
 
+The goal is to make an open source alternative to !['local' by Flywheel](https://local.getflywheel.com/)
+
 If you're working with a WAMP development stack and using a single digitalocean vps for each website you host this will almost certainly help you out! Take a look at the screenshots below.
 
 ![Installation](https://raw.githubusercontent.com/vivithemage/do-wp/master/docs/screenshot-install.png)
