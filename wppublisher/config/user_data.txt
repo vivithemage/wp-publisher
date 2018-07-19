@@ -1,4 +1,9 @@
 #cloud-config
+
+# Upgrade all packages on boot
+#package_upgrade: true
+
+# Create main user
 users:
   - name: thrive
     groups: sudo
@@ -7,9 +12,7 @@ users:
     ssh-authorized-keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAhA9LFuYf3SQrigoWf/VH6zxVRL3DiJlrg77QAcnNZTLuascMzAjxm0PoLhjtNhz+GEnPT9QBV/Fjp56cKdLkzSEXT7ZUQdOpHGPGGdpzrIWGiDgC1L2RAv3sEG1Zpooh84XC/qcWOUy2TxJIr9AaVlOP1Mi5Jn9RSi0EZFlcDf5Ud7j04NRXRwyVbEtZle3r+RSWUyKLhaqb/46D5CS3GUh89gV0QTNiLDdqh4gJmqNkXIZ02yBHM9P5CDQ3sGuhhhXGnuQ/LbBOedzCdI4KN26Ncisid0mKCjsSJ4wbn+ayzbNzaFPGNRZi5YSq4d5HDni/3VS0VhEVrTqDHc/3Ow== rsa-key-20170529
 
-runcmd:
-  - touch /test.txt
-
+# Set user and root pass
 chpasswd:
     list: |
         root:{generated_password}
