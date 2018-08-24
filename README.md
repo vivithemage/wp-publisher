@@ -86,3 +86,9 @@ python class by running the following command:
 That should then result in a standalone exe being created in the dist file. Try:
 
     ls dist
+    
+### Sponsors
+    
+WP Publisher is generously supported by [Jetbrains](https://www.jetbrains.com/) with licenses and free accounts for their products.
+
+
