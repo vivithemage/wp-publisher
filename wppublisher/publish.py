@@ -7,6 +7,7 @@ import shutil
 import random
 import string
 import tempfile
+import errno
 
 import wordpress
 
@@ -15,11 +16,11 @@ def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
 
     return generated_password
 
-'''
-Puts the wp installation and puts it on the server.
-It wraps the folder up, uploads and extracts.
-'''
 class SiteTransport:
+    """
+    Puts the wp installation and puts it on the server.
+    It wraps the folder up, uploads and extracts.
+    """
     def __init__(self, client, gui_variables):
         self.client = client
         self.installation_path = gui_variables['installation_path']
@@ -79,10 +80,33 @@ class NginxConfigTransport:
 
             return True
 
-'''
-Using the ssh details, log in over ssh and Configure the server to suit.
-'''
+
+class SiteFolder:
+    """
+    Creates a temporary folder of the whole site to work on and upload
+    to the server.
+    """
+    def __init__(self):
+        print("init")
+
+    def copy(self, source_path, destination_path):
+        try:
+            shutil.copytree(source_path, destination_path)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            if e.errno == errno.ENOTDIR:
+                shutil.copy(source_path, destination_path)
+            else:
+                print('Directory not copied. Error: %s' % e)
+
+    def delete(self):
+        print("Create full copy")
+
+
 class Configuration():
+    """
+    Using the ssh details, log in over ssh and Configure the server to suit.
+    """
     def __init__(self, ssh_username, ssh_password, vps, gui_variables):
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
@@ -102,12 +126,15 @@ class Configuration():
         self.vps_instance = vps
         self.vps_mysql_password = None
 
-    '''
-    Checks each line for any variables that need replacing.
-    For instance {site_url} would need replacing with whatever was entered in the ui.
-    '''
     def replace_ssh_command_variables(self, line):
-        wp_config = wordpress.WpConfig(self.gui_variables['installation_path'] + '/public_html/wp-config.php')
+        """
+        Checks each line for any variables that need replacing.
+        For instance {site_url} would need replacing with whatever
+        was entered in the ui.
+        """
+        wp_config_path = self.gui_variables['installation_path'] \
+                         + '/public_html/wp-config.php'
+        wp_config = wordpress.WpConfig(wp_config_path)
         wp_config_variables = wp_config.read()
 
         line = line.replace('{mysql_password}', self.vps_mysql_password)
@@ -116,9 +143,9 @@ class Configuration():
 
         return line
 
-    '''
+    """
     Fetch the remote password on the production server
-    '''
+    """
     def get_mysql_password(self, ssh_client):
         command = 'cat /root/.digitalocean_password'
         stdin, stdout, stderr = ssh_client.exec_command(command)
@@ -153,12 +180,13 @@ class Configuration():
 
         return client
 
-    '''
-    Wait a while after the server is spun up so it has a chance to boot.
-    Play about with this, sometime the servers don't spin up under 60 seconds
-    for whatever reason so just try again.
-    '''
+
     def grace_period(self):
+        '''
+        Wait a while after the server is spun up so it has a chance to boot.
+        Play about with this, sometime the servers don't spin up under 60 seconds
+        for whatever reason so just try again.
+        '''
         grace_period_seconds = 60
         max_check_seconds = 60
 
@@ -174,10 +202,10 @@ class Configuration():
         time.sleep(grace_period_seconds)
 
 
-    '''
-    Additional configuration to prepare the site to host wp
-    '''
     def run(self):
+        '''
+        Additional configuration to prepare the site to host wp
+        '''
         self.grace_period()
         ssh_client = self.open_ssh_connection()
 
@@ -202,10 +230,10 @@ class Configuration():
 
         ssh_client.close()
 
-'''
-Does all the vitals to get the server up and running and returns the details to make a ssh connection.
-'''
 class ServerInit:
+    '''
+    Does all the vitals to get the server up and running and returns the details to make a ssh connection.
+    '''
     def __init__(self, ui_fields):
         super(ServerInit, self).__init__()
 
@@ -219,16 +247,12 @@ class ServerInit:
         self.ip_address_v4 = None
         user_data = self.get_user_data()
 
-        '''
-        Digitalocean server details
-        '''
-        DO_server_image = 'lemp-16-04';
+        DO_server_image = 'lemp-16-04'
         DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
-        DO_ram = '1gb',
+        DO_ram = '512mb',
         DO_ipv6 = True
 
-        # TODO enable v6 address and monitoring
         self.instance = digitalocean.Droplet(token=self.api_key,
                                              name=DO_server_name,
                                              region=DO_region,
