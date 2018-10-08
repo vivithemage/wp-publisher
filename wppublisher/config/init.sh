@@ -24,3 +24,18 @@ mysql --user="root" --password="{mysql_password}" {database_name} < /home/thrive
 echo "Setting up webserver";
 rm /etc/nginx/sites-enabled/digitalocean;
 /etc/init.d/nginx restart;
+
+#apt-get update
+#APP_PASS="{mysql_password}"
+#ROOT_PASS="{mysql_password}"
+#APP_DB_PASS="{mysql_password}"
+## Install phpmyadmin
+#export DEBIAN_FRONTEND=noninteractive;
+#echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections;
+#echo "phpmyadmin phpmyadmin/app-password-confirm password $APP_PASS" | debconf-set-selections;
+#echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOT_PASS" | debconf-set-selections;
+#echo "phpmyadmin phpmyadmin/mysql/app-pass password $APP_DB_PASS" | debconf-set-selections;
+#echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect nginx" | debconf-set-selections;
+
+#apt-get install -y phpmyadmin;
+#ln -s /usr/share/phpmyadmin /home/thrive/public_html/;
