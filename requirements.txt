@@ -1,4 +1,4 @@
-paramiko==2.1.5
+paramiko==2.1.6
 PyMySQL==0.7.11
 PyQt5==5.8.2
 python-digitalocean==1.11
