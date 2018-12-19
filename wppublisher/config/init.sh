@@ -24,6 +24,13 @@ mysql --user="root" --password="{mysql_password}" {database_name} < /home/thrive
 echo "Setting up webserver";
 rm /etc/nginx/sites-enabled/digitalocean;
 /etc/init.d/nginx restart;
+echo "Adding swap space"
+fallocate -l 4G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+cp /etc/fstab /etc/fstab.bak
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 #apt-get update
 #APP_PASS="{mysql_password}"
