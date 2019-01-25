@@ -21,7 +21,7 @@ chmod -R --verbose 775  /home/thrive/public_html/;
 echo "Importing database";
 mysql --user="root" --password="{mysql_password}" --execute="CREATE DATABASE {database_name};";
 mysql --user="root" --password="{mysql_password}" {database_name} < /home/thrive/SQL/{database_name}.sql;
-mysql --user="root" --password="{mysql_password}" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{mysql_password}';
+mysql --user="root" --password="{mysql_password}" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{mysql_password}'";
 echo "Restarting database server";
 /etc/init.d/mysql restart
 echo "Setting up webserver";
