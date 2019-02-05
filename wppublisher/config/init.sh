@@ -23,17 +23,18 @@ mysql --user="root" --password="{mysql_password}" --execute="CREATE DATABASE {da
 mysql --user="root" --password="{mysql_password}" {database_name} < /home/thrive/SQL/{database_name}.sql;
 mysql --user="root" --password="{mysql_password}" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{mysql_password}'";
 echo "Restarting database server";
-/etc/init.d/mysql restart
+/etc/init.d/mysql restart;
 echo "Setting up webserver";
 rm /etc/nginx/sites-enabled/digitalocean;
 /etc/init.d/nginx restart;
-echo "Adding swap space"
-fallocate -l 4G /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-cp /etc/fstab /etc/fstab.bak
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+echo "Adding swap space";
+fallocate -l 4G /swapfile;
+chmod 600 /swapfile;
+mkswap /swapfile;
+swapon /swapfile;
+cp /etc/fstab /etc/fstab.bak;
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab;
+apt remove apache2 -y;
 
 #apt-get update
 #APP_PASS="{mysql_password}"
