@@ -223,8 +223,10 @@ class Configuration():
         webserver_config = NginxConfigTransport(ssh_client, self.gui_variables)
         webserver_config.upload()
 
+        print("Starting site upload, please wait.")
         transport = SiteTransport(ssh_client, self.gui_variables)
         transport.upload()
+        print("Completed site upload, beginning server configuration.")
 
         self.run_init_commands(ssh_client)
 
