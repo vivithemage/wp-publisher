@@ -35,14 +35,14 @@ class WpConfig:
         self.config_file_path = config_file_path
 
     def _get_single_variable(self, identifier, line):
-        regex = "define\('" + identifier + "', '(.+?)'"
+        regex = r"define\(\s*'" + identifier + r"'\s*,\s*'(.+?)'\s*"
         database_result = re.search(regex, line, re.IGNORECASE)
 
         if database_result:
             return database_result.group(1)
 
     def _set_single_variable(self, key, value, line):
-        search_regex = "define\('" + key + "', '(.+?)'"
+        search_regex = r"define\('" + key + "', '(.+?)'"
         replace_regex = "define('" + key + "', '" + value + "'"
 
         if re.search(search_regex, line):
@@ -60,14 +60,13 @@ class WpConfig:
         wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_PASSWORD')
         wp_config_results = {}
 
-        file = open(self.config_file_path, "r")
+        with open(self.config_file_path, "r") as file:
+            for line in file:
+                for wp_variable in wp_config_variables:
+                    result = self._get_single_variable(wp_variable, line)
 
-        for line in file:
-            for wp_variable in wp_config_variables:
-                result = self._get_single_variable(wp_variable, line)
-
-                if result:
-                    wp_config_results[wp_variable] = result
+                    if result:
+                        wp_config_results[wp_variable] = result
 
         return wp_config_results
 
