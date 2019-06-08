@@ -6,7 +6,7 @@ apt-get install php-mbstring -y;
 apt-get install php-gd -y;
 apt-get install php-imagick -y;
 apt-get install php-xml -y;
-apt-get install proftpd -y
+apt-get install proftpd -y;
 echo "Extracting Uploaded Site to user directory";
 cd /root;
 unzip '*.zip' -d /home/thrive/;
