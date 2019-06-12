@@ -1,5 +1,6 @@
-## Overview
+![Installation](https://raw.githubusercontent.com/vivithemage/wp-publisher/master/docs/wp-publisher-logo.png)
 
+## About
 A desktop app which helps speed up wordpress development and deployment on digitalocean servers.
 
 It does this by allowing a user to:
