@@ -10,6 +10,7 @@ import tempfile
 import errno
 
 import wordpress
+from paths import CONFIG_DIR
 
 def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
     generated_password = ''.join(random.choice(chars) for x in range(size))
@@ -45,7 +46,7 @@ class SiteTransport:
 
 class NginxConfigTransport:
     def __init__(self, client, gui_variables):
-        self.config_path_template = 'config/nginx_config.conf'
+        self.config_path_template = os.path.join(CONFIG_DIR, 'nginx_config.conf')
         self.site_url = gui_variables['site_url']
         self.client = client
         self.temp_dir = tempfile.mkdtemp()
@@ -118,7 +119,7 @@ class Configuration():
         while vps.instance.ip_address is None:
             vps.instance.load()
 
-        self.ssh_init_path = 'config/init.sh'
+        self.ssh_init_path = os.path.join(CONFIG_DIR, 'init.sh')
         self.ipv4_address = vps.instance.ip_address
         self.ssh_username = ssh_username
         self.ssh_password = ssh_password
@@ -271,6 +272,7 @@ class ServerInit:
     '''
     def get_user_data(self):
         cloud_init_path = 'config/user_data.txt'
+        cloud_init_path = os.path.join(CONFIG_DIR, 'user_data.txt')
 
         with open(cloud_init_path, 'r') as cloud_init_file:
             user_data_raw = cloud_init_file.read()
