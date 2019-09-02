@@ -57,11 +57,16 @@ class WpConfig:
 
         return line
 
-    def read(self):
+    def read(self, ssh_client=None):
         wp_config_variables = ('DB_NAME', 'DB_USER', 'DB_PASSWORD')
         wp_config_results = {}
 
-        with open(self.config_file_path, "r") as file:
+        if ssh_client is not None:
+            open_file_func = ssh_client.open_sftp().open
+        else:
+            open_file_func = open
+
+        with open_file_func(self.config_file_path, "r") as file:
             for line in file:
                 for wp_variable in wp_config_variables:
                     result = self._get_single_variable(wp_variable, line)
@@ -71,17 +76,22 @@ class WpConfig:
 
         return wp_config_results
 
-    def write(self, db_name='wp_site_db', db_username='root', db_password='root', db_hostname='localhost'):
+    def write(self, db_name='wp_site_db', db_username='root', db_password='root', db_hostname='localhost', ssh_client=None):
         new_config_content = ''
 
         config_variables = {'DB_NAME': db_name, 'DB_USER': db_username, 'DB_PASSWORD': db_password, 'DB_HOST': db_hostname}
 
-        with open(self.config_file_path) as f:
+        if ssh_client is not None:
+            open_file_func = ssh_client.open_sftp().open
+        else:
+            open_file_func = open
+
+        with open_file_func(self.config_file_path) as f:
             for line in f:
                 new_config_content = new_config_content + self._group_replace(config_variables, line)
 
         # Write the file out again
-        with open(self.config_file_path, 'w') as file:
+        with open_file_func(self.config_file_path, 'w') as file:
             file.write(new_config_content)
 
         return True

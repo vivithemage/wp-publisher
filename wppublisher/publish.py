@@ -162,8 +162,6 @@ class Configuration():
                 stdin, stdout, stderr = ssh_client.exec_command(amended_line)
                 self.logger.info(stdout.readlines())
 
-        ssh_client.close()
-
     '''
     Opens up ssh client and returns client to execute commands
     '''
@@ -211,14 +209,6 @@ class Configuration():
 
         self.get_mysql_password(ssh_client)
         print(self.gui_variables)
-        wp_config_path = self.gui_variables['installation_path'] + '/public_html/wp-config.php'
-        wp_config = wordpress.WpConfig(wp_config_path)
-        wp_config_vars = wp_config.read()
-
-        wp_config.write(db_name=wp_config_vars['DB_NAME'],
-                        db_username='root',
-                        db_password=self.vps_mysql_password,
-                        db_hostname='localhost')
 
         webserver_config = NginxConfigTransport(ssh_client, self.gui_variables)
         webserver_config.upload()
@@ -226,9 +216,21 @@ class Configuration():
         print("Starting site upload, please wait.")
         transport = SiteTransport(ssh_client, self.gui_variables)
         transport.upload()
-        print("Completed site upload, beginning server configuration.")
 
+        print("Completed site upload, beginning server configuration.")
         self.run_init_commands(ssh_client)
+
+        print("Updating wp-config")
+        # insert new db details to the config, now the file has been uploaded
+        wp_config_path = '/home/thrive/public_html/wp-config.php'
+        wp_config = wordpress.WpConfig(wp_config_path)
+        wp_config_vars = wp_config.read(ssh_client=ssh_client)
+
+        wp_config.write(db_name=wp_config_vars['DB_NAME'],
+                        db_username='root',
+                        db_password=self.vps_mysql_password,
+                        db_hostname='localhost',
+                        ssh_client=ssh_client)
 
         ssh_client.close()
 
