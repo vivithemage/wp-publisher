@@ -220,14 +220,14 @@ class App(QMainWindow):
             '''
             progress_callback.emit('Publishing site')
             vps_configuration = publish.Configuration(username, password, vps, self.publish_variables)
-            vps_configuration.run()
+            db_pass = vps_configuration.run()
 
             progress_callback.emit('Site published and configured. Details are:')
             progress_callback.emit('ipv4 address:' + vps_configuration.ipv4_address)
             progress_callback.emit('username: ' + username)
             progress_callback.emit('password: ' + password)
+            progress_callback.emit('database password: ' + db_pass)
             progress_callback.emit('Finished Configuration')
-            # progress_callback.emit('Uploading files')
         else:
             progress_callback.emit(error_message)
 
