@@ -42,8 +42,7 @@ class WpConfig:
             return database_result.group(1)
 
     def _set_single_variable(self, key, value, line):
-        search_regex = r"define\('" + key + "', '(.+?)'"
-        #search_regex = r"define\(\s*'" + identifier + r"'\s*,\s*'(.+?)'\s*"
+        search_regex = r"define\(\s*'" + key + r"'\s*,\s*'(.+?)'\s*"
         replace_regex = "define('" + key + "', '" + value + "'"
 
         if re.search(search_regex, line):

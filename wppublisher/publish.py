@@ -252,6 +252,7 @@ class Configuration():
         transport.remove_file('/home/thrive' + LOG_PATH)
 
         ssh_client.close()
+        return self.vps_mysql_password
 
 class ServerInit:
     '''
