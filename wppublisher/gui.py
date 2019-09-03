@@ -220,7 +220,7 @@ class App(QMainWindow):
             progress_callback.emit('username: ' + username)
             progress_callback.emit('password: ' + password)
             progress_callback.emit('Finished Configuration')
-            progress_callback.emit('Uploading files')
+            # progress_callback.emit('Uploading files')
         else:
             progress_callback.emit(error_message)
 
