@@ -174,6 +174,13 @@ class App(QMainWindow):
     def thread_complete(self):
         print("Finished Thread")
 
+    def publish_complete(self):
+        msg = QMessageBox()
+
+        msg.setWindowTitle("Complete")
+        msg.setText('Publication complete - see the Logs tab for details to view or connect to the new site')
+        msg.exec_()
+
     def progress_fn(self, log):
         self.status_bar_message(log)
         self.ui.logs_output_text_box.insertPlainText(log + '\n')
@@ -211,11 +218,11 @@ class App(QMainWindow):
             '''
             Connect to server and perform all necessary configuration
             '''
-            progress_callback.emit('Starting configuration')
+            progress_callback.emit('Publishing site')
             vps_configuration = publish.Configuration(username, password, vps, self.publish_variables)
             vps_configuration.run()
 
-            progress_callback.emit('Spun up server. Details are:')
+            progress_callback.emit('Site published and configured. Details are:')
             progress_callback.emit('ipv4 address:' + vps_configuration.ipv4_address)
             progress_callback.emit('username: ' + username)
             progress_callback.emit('password: ' + password)
@@ -228,6 +235,7 @@ class App(QMainWindow):
     def publish_trigger(self):
         publication_worker = workers.Worker(self.start_publish)
         publication_worker.signals.finished.connect(self.thread_complete)
+        publication_worker.signals.finished.connect(self.publish_complete)
         publication_worker.signals.result.connect(self.print_output)
         publication_worker.signals.progress.connect(self.progress_fn)
 
