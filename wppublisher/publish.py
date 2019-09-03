@@ -10,7 +10,7 @@ import tempfile
 import errno
 
 import wordpress
-from paths import CONFIG_DIR
+from paths import CONFIG_DIR, LOG_PATH
 
 def password_generator(size=24, chars=string.ascii_uppercase + string.digits):
     generated_password = ''.join(random.choice(chars) for x in range(size))
@@ -42,6 +42,15 @@ class SiteTransport:
         sftp.put(zip_path, remote_zip_path)
 
         return True
+
+    def upload_file(self, local_path, remote_path):
+        '''
+        convenience method to upload a single file
+        '''
+        self.client.open_sftp().put(local_path, remote_path)
+
+    def remove_file(self, path):
+        self.client.open_sftp().remove(path)
 
 
 class NginxConfigTransport:
@@ -109,9 +118,6 @@ class Configuration():
     Using the ssh details, log in over ssh and Configure the server to suit.
     """
     def __init__(self, ssh_username, ssh_password, vps, gui_variables):
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
-
         """ 
         Keep trying to load until ip is populated. 
         TODO. This may be an api issue. Take a look.
@@ -126,21 +132,21 @@ class Configuration():
         self.gui_variables = gui_variables
         self.vps_instance = vps
         self.vps_mysql_password = None
+        self.log_path = self.gui_variables['installation_path'] + LOG_PATH
 
-    def replace_ssh_command_variables(self, line):
+        logging.basicConfig(filename=self.log_path, level=logging.INFO)
+        self.logger = logging.getLogger(__name__)
+
+    def replace_ssh_command_variables(self, line, vars):
         """
         Checks each line for any variables that need replacing.
         For instance {site_url} would need replacing with whatever
         was entered in the ui.
         """
-        wp_config_path = self.gui_variables['installation_path'] \
-                         + '/public_html/wp-config.php'
-        wp_config = wordpress.WpConfig(wp_config_path)
-        wp_config_variables = wp_config.read()
 
         line = line.replace('{mysql_password}', self.vps_mysql_password)
         line = line.replace('{ssh_username}', 'thrive')
-        line = line.replace('{database_name}', wp_config_variables['DB_NAME'])
+        line = line.replace('{database_name}', vars['DB_NAME'])
 
         return line
 
@@ -156,10 +162,16 @@ class Configuration():
         self.vps_mysql_password = self.vps_mysql_password.rstrip()
 
     def run_init_commands(self, ssh_client):
+        wp_config_path = self.gui_variables['installation_path'] \
+                    + '/public_html/wp-config.php'
+        wp_config = wordpress.WpConfig(wp_config_path)
+        wp_config_variables = wp_config.read()
+
         with open(self.ssh_init_path) as f:
             for line in f:
-                amended_line = self.replace_ssh_command_variables(line)
+                amended_line = self.replace_ssh_command_variables(line, wp_config_variables)
                 print(amended_line)
+                self.logger.info("running command: {}".format(amended_line))
                 stdin, stdout, stderr = ssh_client.exec_command(amended_line)
                 self.logger.info(stdout.readlines())
 
@@ -233,6 +245,12 @@ class Configuration():
                         db_hostname='localhost',
                         ssh_client=ssh_client)
 
+        # upload log file
+        print("Uploading log file")
+        transport.upload_file(self.log_path, "/var/log" + LOG_PATH)
+        # remove copy of log file in root directory (it's incomplete and therefore relatively useless)
+        transport.remove_file('/home/thrive' + LOG_PATH)
+
         ssh_client.close()
 
 class ServerInit:
@@ -242,7 +260,9 @@ class ServerInit:
     def __init__(self, ui_fields):
         super(ServerInit, self).__init__()
 
-        logging.basicConfig(level=logging.INFO)
+        self.log_path = ui_fields['installation_path'] + LOG_PATH
+
+        logging.basicConfig(filename=self.log_path, level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
         self.api_key = ui_fields['api_key']
