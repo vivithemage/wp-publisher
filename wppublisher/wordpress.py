@@ -75,10 +75,11 @@ class WpConfig:
 
         return wp_config_results
 
-    def write(self, db_name='wp_site_db', db_username='root', db_password='root', db_hostname='localhost', ssh_client=None):
+    def write(self, db_name='wp_site_db', db_username='root', db_password='root', db_hostname='localhost', site_url='localhost:8888', ssh_client=None):
         new_config_content = ''
 
-        config_variables = {'DB_NAME': db_name, 'DB_USER': db_username, 'DB_PASSWORD': db_password, 'DB_HOST': db_hostname}
+        config_variables = {'DB_NAME': db_name, 'DB_USER': db_username, 'DB_PASSWORD': db_password, 'DB_HOST': db_hostname,
+            'WP_HOME': 'http://' + site_url, 'WP_SITEURL': 'http://' + site_url}
 
         if ssh_client is not None:
             open_file_func = ssh_client.open_sftp().open

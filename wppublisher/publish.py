@@ -147,6 +147,7 @@ class Configuration():
         line = line.replace('{mysql_password}', self.vps_mysql_password)
         line = line.replace('{ssh_username}', 'thrive')
         line = line.replace('{database_name}', vars['DB_NAME'])
+        line = line.replace('{site_url}', self.gui_variables['site_url'])
 
         return line
 
@@ -243,6 +244,7 @@ class Configuration():
                         db_username='root',
                         db_password=self.vps_mysql_password,
                         db_hostname='localhost',
+                        site_url=self.gui_variables['site_url'],
                         ssh_client=ssh_client)
 
         # upload log file

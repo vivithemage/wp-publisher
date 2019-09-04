@@ -1,6 +1,9 @@
 # Changelog
 All changes to this project since 02/09/2019 should be documented in this file, with the latest ones added to the top.
 
+## 04/09/2019
+- overwrote the SQL file, after uploading to server, to replace localhost:8888 with the provided site URL. Also updated the WP_HOME and WP_SITEURL in wp-config. These changes should ensure the site works straight away after the publisher program is complete and the DNS updated
+
 ## 03/09/2019
 - echoed out the database password to the Logs tab. Fixed regex issue which sometimes caused the db settings not to be updated in wp-config.
 
