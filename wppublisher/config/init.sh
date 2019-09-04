@@ -40,17 +40,18 @@ cp /etc/fstab /etc/fstab.bak;
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab;
 apt remove apache2 -y;
 
-#apt-get update
-#APP_PASS="{mysql_password}"
-#ROOT_PASS="{mysql_password}"
-#APP_DB_PASS="{mysql_password}"
-## Install phpmyadmin
-#export DEBIAN_FRONTEND=noninteractive;
-#echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections;
-#echo "phpmyadmin phpmyadmin/app-password-confirm password $APP_PASS" | debconf-set-selections;
-#echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOT_PASS" | debconf-set-selections;
-#echo "phpmyadmin phpmyadmin/mysql/app-pass password $APP_DB_PASS" | debconf-set-selections;
-#echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect nginx" | debconf-set-selections;
+apt-get update
+APP_PASS="{mysql_password}"
+ROOT_PASS="{mysql_password}"
+APP_DB_PASS="{mysql_password}"
+echo "Installing phpmyadmin";
+export DEBIAN_FRONTEND=noninteractive;
+echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections;
+echo "phpmyadmin phpmyadmin/app-password-confirm password $APP_PASS" | debconf-set-selections;
+echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOT_PASS" | debconf-set-selections;
+echo "phpmyadmin phpmyadmin/mysql/app-pass password $APP_DB_PASS" | debconf-set-selections;
+echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect nginx" | debconf-set-selections;
 
-#apt-get install -y phpmyadmin;
-#ln -s /usr/share/phpmyadmin /home/thrive/public_html/;
+apt-get install -y phpmyadmin;
+ln -s /usr/share/phpmyadmin /home/thrive/public_html/;
+service nginx restart;
