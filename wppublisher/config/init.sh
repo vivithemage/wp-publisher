@@ -54,4 +54,6 @@ echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect nginx" | debconf-s
 
 apt-get install -y phpmyadmin;
 ln -s /usr/share/phpmyadmin /home/thrive/public_html/;
+sed -i "s/|\s*\((count(\$analyzed_sql_results\['select_expr'\]\)/| (\1)/g" /home/thrive/public_html/phpmyadmin/libraries/sql.lib.php # fix stupid phpmyadmin syntax error
+
 service nginx restart;
