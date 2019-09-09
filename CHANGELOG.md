@@ -1,6 +1,13 @@
 # Changelog
 All changes to this project since 02/09/2019 should be documented in this file, with the latest ones added to the top.
 
+## 09/09/2019
+- improved field validation:
+-- now for installation as well as publication
+-- made validation errors, and any Python exceptions raised by the process, display an alert box to the user, rather than being swallowed or relegated to a hard-to-notice line of text at the bottom of the window
+
+- made the installation section prepopulate the database fields, if the user has appropriate environment variables set
+
 ## 04/09/2019
 - installed phpMyAdmin, which can be accessed at /phpmyadmin at the root of the domain
 

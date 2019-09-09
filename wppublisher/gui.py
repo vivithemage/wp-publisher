@@ -22,7 +22,7 @@ class Fields():
         return getattr(self.__class__, "validate_" + field_name)(self, self.installation_variables[field_name])
 
 
-    def validate_path(self, path):
+    def validate_installation_path(self, path):
         if path == '':
             message = 'Installation path is empty'
             result = False
@@ -34,6 +34,20 @@ class Fields():
             result = False
         elif not os.path.isdir(os.path.join(path, "public_html")):
             message = 'No public_html directory found, please ensure it exists in the chosen directory'
+            result = False
+        else:
+            message = 'Path OK'
+            result = True
+
+        return result, message
+
+    
+    def validate_path(self, path):
+        if path == '':
+            message = 'Installation path is empty'
+            result = False
+        elif not os.path.isdir(path):
+            message = 'Path doesn\'t exist, check you entered it correctly'
             result = False
         else:
             message = 'Path OK'
@@ -68,15 +82,17 @@ class Fields():
         if db['hostname'] == '':
             message = 'Database hostname is empty'
             result = False
+        elif db['username'] == '':
+            message = 'Database username is empty'
+            result = False
+        elif db['password'] == '':
+            message = 'Password is empty'
+            result = False
         else:
-            message = 'Database hostname OK'
+            message = 'Database fields OK'
             result = True
 
         return result, message
-
-
-    def validate_installation_path(self, path):
-        return self.validate_path(path)
 
 
     def validate_api_key(self, key):
@@ -121,6 +137,8 @@ class App(QMainWindow):
         self.init_ui()
         self.publish_variables = {}
         self.installation_variables = {}
+        self.failed_validation = False
+        self.process_complete = False
 
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -175,17 +193,45 @@ class App(QMainWindow):
         print("Finished Thread")
 
     def publish_complete(self):
+        if self.process_complete:
+            msg = QMessageBox()
+
+            msg.setWindowTitle("Complete")
+            msg.setText('Publication complete - see the Logs tab for details to view or connect to the new site')
+            msg.exec_()
+
+
+    def install_complete(self):
+        if self.process_complete:
+            msg = QMessageBox()
+
+            msg.setWindowTitle("Complete")
+            msg.setText('Installation complete!')
+            msg.exec_()
+
+
+    def error_message(self, error_info):
         msg = QMessageBox()
 
-        msg.setWindowTitle("Complete")
-        msg.setText('Publication complete - see the Logs tab for details to view or connect to the new site')
+        msg.setWindowTitle("An error occurred")
+        msg.setText(error_info[1].args[1])
         msg.exec_()
+
 
     def progress_fn(self, log):
         self.status_bar_message(log)
         self.ui.logs_output_text_box.insertPlainText(log + '\n')
+        if self.failed_validation:
+            msg = QMessageBox()
+
+            msg.setWindowTitle("Validation failure")
+            msg.setText(log)
+            msg.exec_()
+            self.failed_validation = False
+
 
     def start_install(self, progress_callback):
+        self.process_complete = False
         fields = Fields()
         self.get_installation_variables()
         valid, error_message = fields.valid('installation', self.installation_variables)
@@ -194,14 +240,18 @@ class App(QMainWindow):
             progress_callback.emit('Starting Install')
             installation = wordpress.Wordpress(self.installation_variables)
             installation.start()
+            self.process_complete = True
             progress_callback.emit('Finished installation')
         else:
+            self.failed_validation = True
             progress_callback.emit(error_message)
+
 
     '''
     Check all the fields and other details are there before beginning
     '''
     def start_publish(self, progress_callback):
+        self.process_complete = False
         fields = Fields()
         self.get_publish_variables()
         valid, error_message = fields.valid('publish', self.publish_variables)
@@ -228,15 +278,19 @@ class App(QMainWindow):
             progress_callback.emit('password: ' + password)
             progress_callback.emit('database password: ' + db_pass)
             progress_callback.emit('Finished Configuration')
+            self.process_complete = True
         else:
+            self.failed_validation = True
             progress_callback.emit(error_message)
+
 
     # TODO the functions below do pretty much the same. Merge into generic
     def publish_trigger(self):
         publication_worker = workers.Worker(self.start_publish)
         publication_worker.signals.finished.connect(self.thread_complete)
-        publication_worker.signals.finished.connect(self.publish_complete)
+        publication_worker.signals.error.connect(self.error_message)
         publication_worker.signals.result.connect(self.print_output)
+        publication_worker.signals.result.connect(self.publish_complete)
         publication_worker.signals.progress.connect(self.progress_fn)
 
         self.threadpool.start(publication_worker)
@@ -244,7 +298,9 @@ class App(QMainWindow):
     def install_trigger(self):
         installation_worker = workers.Worker(self.start_install)
         installation_worker.signals.finished.connect(self.thread_complete)
+        installation_worker.signals.error.connect(self.error_message)
         installation_worker.signals.result.connect(self.print_output)
+        installation_worker.signals.result.connect(self.install_complete)
         installation_worker.signals.progress.connect(self.progress_fn)
 
         self.threadpool.start(installation_worker)
@@ -261,6 +317,10 @@ class App(QMainWindow):
     def init_ui(self):
         self.ui = generated.Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.installation_database_hostname_text.setText(os.getenv("WP_DBHOST"))
+        self.ui.installation_database_password_text.setText(os.getenv("WP_DBPASSWORD"))
+        self.ui.installation_database_username_text.setText(os.getenv("WP_DBUSER"))
+
 
         # File path selectors
         installation_path_selector = self.ui.installation_path_file_selector
