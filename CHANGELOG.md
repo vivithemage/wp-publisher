@@ -2,6 +2,8 @@
 All changes to this project since 02/09/2019 should be documented in this file, with the latest ones added to the top.
 
 ## 09/09/2019
+- made installation process rename root folder to 'public_html', so that a subsequent publish process will work without having to rename the folder
+
 - improved field validation:
 -- now for installation as well as publication
 -- made validation errors, and any Python exceptions raised by the process, display an alert box to the user, rather than being swallowed or relegated to a hard-to-notice line of text at the bottom of the window
