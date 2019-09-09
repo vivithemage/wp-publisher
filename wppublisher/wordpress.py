@@ -105,7 +105,7 @@ class Wordpress:
         self.wp_url = 'https://wordpress.org/latest.zip'
         self.ui_fields = ui_fields
 
-        self.installation_folder = self.ui_fields['path'] + '/' + self.ui_fields['site_url']
+        self.installation_folder = os.path.join(self.ui_fields['path'], 'public_html')
         self.config_file = self.installation_folder + '/wp-config.php'
 
     def rename_sample_config(self):
