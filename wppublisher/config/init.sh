@@ -7,6 +7,7 @@ apt-get install php-gd -y;
 apt-get install php-imagick -y;
 apt-get install php-xml -y;
 apt-get install proftpd -y;
+apt-get install git -y;
 echo "Extracting Uploaded Site to user directory";
 cd /root;
 unzip '*.zip' -d /home/thrive/;
@@ -57,3 +58,10 @@ ln -s /usr/share/phpmyadmin /home/thrive/public_html/;
 sed -i "s/|\s*\((count(\$analyzed_sql_results\['select_expr'\]\)/| (\1)/g" /home/thrive/public_html/phpmyadmin/libraries/sql.lib.php # fix stupid phpmyadmin syntax error
 
 service nginx restart;
+
+echo "Adding user dotfiles"
+git clone https://github.com/vivithemage/dotfiles.git; 
+cd dotfiles; 
+bash install.sh 
+chown -R thrive /home/thrive/dotfiles;
+chmod -R 775 /home/thrive/dotfiles;
