@@ -278,7 +278,7 @@ class ServerInit:
         DO_server_image = 'lemp-18-04'
         DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
-        DO_ram = '512mb',
+        DO_ram = 's-1vcpu-1gb'
         DO_ipv6 = True
 
         self.instance = digitalocean.Droplet(token=self.api_key,
