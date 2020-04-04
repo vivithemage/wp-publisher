@@ -59,9 +59,17 @@ sed -i "s/|\s*\((count(\$analyzed_sql_results\['select_expr'\]\)/| (\1)/g" /home
 
 service nginx restart;
 
-echo "Adding user dotfiles"
+echo "Adding user dotfiles";
 git clone https://github.com/vivithemage/dotfiles.git; 
 cd dotfiles; 
 bash install.sh 
 chown -R thrive /home/thrive/dotfiles;
 chmod -R 775 /home/thrive/dotfiles;
+
+echo "Adding defibrillator";
+cd /home/thrive;
+git clone https://github.com/vivithemage/defibrillator.git;
+cd defibrillator;
+python install.py {site_url};
+
+
