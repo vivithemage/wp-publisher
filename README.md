@@ -80,13 +80,16 @@ python class by running the following command:
 
 ### Compiling into standalone application
 
-    pip install pyinstaller
+Download [pyinstaller](https://www.pyinstaller.org/)
     
-    pyinstaller.exe --onefile wp-publisher.py
+    cd wp-publisher
+    pyinstaller.exe --onefile wp-publisher.py --icon=logo.ico
     
 That should then result in a standalone exe being created in the dist file. Try:
 
     ls dist
+    
+From here you can run the nsis script (installer.nsi) which will build the installer.
     
 ### Sponsors
     
