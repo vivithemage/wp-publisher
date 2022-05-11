@@ -72,4 +72,5 @@ git clone https://github.com/vivithemage/defibrillator.git;
 cd defibrillator;
 python install.py {site_url};
 
-
+echo "DO Adding analytics"
+curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
