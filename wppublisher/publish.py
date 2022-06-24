@@ -275,7 +275,7 @@ class ServerInit:
         self.ip_address_v4 = None
         user_data = self.get_user_data()
 
-        DO_server_image = 'lemp-20-04'
+        DO_server_image = 'lemp-18-04'
         DO_server_name = ui_fields['site_url'] + '-wp'
         DO_region = 'lon1'
         DO_ram = 's-1vcpu-1gb'
