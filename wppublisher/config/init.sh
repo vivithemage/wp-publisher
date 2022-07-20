@@ -77,4 +77,4 @@ curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
 
 echo "Removing Snapd daemon due to it sometimes crashing and basically not being used (we use apt at the moment)"
 systemctl stop snapd
-apt remove snapd
+apt-get remove snapd -y
