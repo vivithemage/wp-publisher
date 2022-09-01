@@ -10,7 +10,7 @@ apt-get install proftpd -y;
 apt-get install git -y;
 echo "Extracting Uploaded Site to user directory";
 cd /root;
-unzip '*.zip' -d /home/thrive/;
+unzip -o '*.zip' -d /home/thrive/;
 echo "Creating Folders and setting permissions";
 mkdir -v /home/thrive/public_html;
 mkdir -v /home/thrive/SQL;
